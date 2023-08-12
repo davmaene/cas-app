@@ -24,8 +24,8 @@ export const SigninScreen = ({ navigation, route }) => {
 
     const onSubmit = async () => {
         setoutput("");
-        if(num.length > 0 && num.length < 10){
-            if(password.length > 0){
+        if (num.length > 0 && num.length < 10) {
+            if (password.length > 0) {
                 setisloading(true)
                 try {
                     await onRunExternalRQST({
@@ -36,7 +36,7 @@ export const SigninScreen = ({ navigation, route }) => {
                             password
                         }
                     }, (err, done) => {
-                        if(done){
+                        if (done) {
                             setisloading(false)
                             switch (done['status']) {
                                 case 200:
@@ -47,8 +47,8 @@ export const SigninScreen = ({ navigation, route }) => {
                                         dot: "?, ?, ?, ?, ?, ?, ?, ?",
                                         values: [`${u['fsname']}`, `${u['lsname']}`, `${u['nickname']}`, `${u['age']}`, `${u['gender']}`, `${u['phone']}`, `${new Date().toLocaleString()}`, `${u['hospitalref']}`]
                                     }, (err, insert) => {
-                                        if(insert) navigation.replace("tabs");
-                                        else{
+                                        if (insert) navigation.replace("tabs");
+                                        else {
                                             setisloading(false);
                                             setcanverify(true);
                                             setValue("")
@@ -104,7 +104,7 @@ export const SigninScreen = ({ navigation, route }) => {
                                     });
                                     break;
                             }
-                        }else{
+                        } else {
                             setisloading(false)
                             setoutput("Une erreur inconue vient de se produire !")
                             Toast.show({
@@ -117,14 +117,14 @@ export const SigninScreen = ({ navigation, route }) => {
                 } catch (error) {
                     console.log("erreur => ", error);
                 }
-            }else{
+            } else {
                 Toast.show({
                     type: 'error',
                     text1: 'Erreur',
                     text2: 'Entrer le mot de passe',
                 });
             }
-        }else{
+        } else {
             Toast.show({
                 type: 'error',
                 text1: 'Erreur',
@@ -133,86 +133,86 @@ export const SigninScreen = ({ navigation, route }) => {
         }
     };
 
-    return(
+    return (
         <>
-            <View style={{flex: 1, backgroundColor: Colors.primaryColor}}>
-                <Header colors={Colors.whiteColor} />
-                    <ScrollView 
-                        contentContainerStyle={{ paddingBottom: 0, backgroundColor: Colors.primaryColor }}
-                        showsHorizontalScrollIndicator={false}
-                        showsVerticalScrollIndicator={false}
-                    >
+            <View style={{ flex: 1, backgroundColor: Colors.whiteColor }}>
+                <Header colors={Colors.primaryColor} />
+                <ScrollView
+                    contentContainerStyle={{ paddingBottom: 0, backgroundColor: Colors.primaryColor }}
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                >
                     <View style={{ borderTopEndRadius: Dims.bigradius, borderTopStartRadius: Dims.bigradius, backgroundColor: Colors.whiteColor, height: Dims.height, marginTop: Dims.smallradius }}>
-                        <View style={{width: "85%", alignSelf: "center", marginTop: Dims.bigradius }}>
-                            <View style={{width: "100%", height: 65, flexDirection: "column"}}>
+                        <View style={{ width: "85%", alignSelf: "center", marginTop: Dims.bigradius }}>
+                            <View style={{ width: "100%", height: 65, flexDirection: "column" }}>
                                 <Text style={{ fontFamily: "mons-b", paddingLeft: 10, color: Colors.primaryColor }}>Numéro de téléphone</Text>
-                                <View style={[ inputGroup.container, { flexDirection: "row-reverse" } ]}>
+                                <View style={[inputGroup.container, { flexDirection: "row-reverse" }]}>
                                     <View style={{ width: "80%", justifyContent: "center", alignContent: "center", alignItems: "center", flexDirection: "row" }}>
-                                        <View style={{height: "100%", justifyContent: "center", backgroundColor: Colors.pillColor }}>
+                                        <View style={{ height: "100%", justifyContent: "center", backgroundColor: Colors.pillColor }}>
                                             <Text style={{ paddingLeft: 25, fontFamily: "mons", color: Colors.primaryColor }}>+243</Text>
                                         </View>
-                                        <TextInput placeholder='000 000 000' maxLength={10} keyboardType={"number-pad"} onChangeText={(t) => setnum(t)} style={[ inputGroup.input, { fontFamily: "mons", width: "85%" }]} />
+                                        <TextInput placeholder='000 000 000' maxLength={10} keyboardType={"number-pad"} onChangeText={(t) => setnum(t)} style={[inputGroup.input, { fontFamily: "mons", width: "85%" }]} />
                                     </View>
-                                    <View style={[ inputGroup.iconcontainer, { backgroundColor: Colors.primaryColor }]}>
-                                        <Entypo name="phone" size={Dims.iconsize} color={ Colors.whiteColor } />
+                                    <View style={[inputGroup.iconcontainer, { backgroundColor: Colors.primaryColor }]}>
+                                        <Entypo name="phone" size={Dims.iconsize} color={Colors.whiteColor} />
                                     </View>
                                 </View>
                             </View>
                             {/* ------------------------ */}
-                            <View style={{width: "100%", height: 65, flexDirection: "column", marginTop: 25}}>
+                            <View style={{ width: "100%", height: 65, flexDirection: "column", marginTop: 25 }}>
                                 <Text style={{ fontFamily: "mons-b", paddingLeft: 10, color: Colors.primaryColor }}>Mot de passe</Text>
-                                <View style={[ inputGroup.container, { flexDirection: "row-reverse" }]}>
+                                <View style={[inputGroup.container, { flexDirection: "row-reverse" }]}>
                                     <TouchableHighlight
                                         underlayColor={Colors.whiteColor}
-                                        onPress={() => seteye(!eye)} 
-                                        style={[ inputGroup.iconcontainer, { backgroundColor: Colors.pillColor }]}
+                                        onPress={() => seteye(!eye)}
+                                        style={[inputGroup.iconcontainer, { backgroundColor: Colors.pillColor }]}
                                     >
-                                        <Ionicons name={eye ? "eye-off" : "eye"} size={ Dims.iconsize } color={ Colors.primaryColor } />
+                                        <Ionicons name={eye ? "eye-off" : "eye"} size={Dims.iconsize} color={Colors.primaryColor} />
                                     </TouchableHighlight>
-                                    <View style={[ inputGroup.inputcontainer, { width: "60%" } ]}>
-                                        <TextInput placeholder='******' secureTextEntry={eye} enablesReturnKeyAutomatically onChangeText={(t) => setpassword(t)} style={[ inputGroup.input, { fontFamily: "mons" } ]} />
+                                    <View style={[inputGroup.inputcontainer, { width: "60%" }]}>
+                                        <TextInput placeholder='******' secureTextEntry={eye} enablesReturnKeyAutomatically onChangeText={(t) => setpassword(t)} style={[inputGroup.input, { fontFamily: "mons" }]} />
                                     </View>
-                                    <View style={[ inputGroup.iconcontainer, { backgroundColor: Colors.primaryColor }]}>
-                                        <Entypo name="lock" size={ Dims.iconsize } color={ Colors.whiteColor } />
+                                    <View style={[inputGroup.iconcontainer, { backgroundColor: Colors.primaryColor }]}>
+                                        <Entypo name="lock" size={Dims.iconsize} color={Colors.whiteColor} />
                                     </View>
                                 </View>
                             </View>
                             {/* ------------------------ */}
                             <View style={{ width: "100%", height: 65, flexDirection: "column", marginVertical: 25 }}>
-                                <TouchableHighlight 
+                                <TouchableHighlight
                                     onPress={() => {
                                         onSubmit()
                                     }}
                                     disabled={isloading}
-                                    underlayColor={ Colors.whiteColor }
+                                    underlayColor={Colors.whiteColor}
                                     style={btn}
                                 >
-                                    {isloading 
-                                    ?
-                                        <Loader/>
-                                    :
-                                        <Text style={{ color: Colors.whiteColor, fontFamily: "mons" }}>Connexion</Text>    
+                                    {isloading
+                                        ?
+                                        <Loader />
+                                        :
+                                        <Text style={{ color: Colors.whiteColor, fontFamily: "mons" }}>Connexion</Text>
                                     }
                                 </TouchableHighlight>
-                                <Text style={{fontFamily: "mons", fontSize: Dims.subtitletextsize, marginVertical: 10, color: Colors.dangerColor, textAlign: "center" }}>
+                                <Text style={{ fontFamily: "mons", fontSize: Dims.subtitletextsize, marginVertical: 10, color: Colors.dangerColor, textAlign: "center" }}>
                                     {output}
                                 </Text>
                             </View>
                         </View>
-                        <View style={{flexDirection: "row", width: "85%", alignSelf: "center", alignContent: "center", alignItems: "center", justifyContent: "space-between" }}>
+                        <View style={{ flexDirection: "row", width: "85%", alignSelf: "center", alignContent: "center", alignItems: "center", justifyContent: "space-between" }}>
                             <View style={{ width: "45%" }}>
-                                <Divider/>
+                                <Divider />
                             </View>
                             <View>
                                 <Text style={{ fontFamily: "mons-b", color: Colors.primaryColor }}>OU</Text>
                             </View>
                             <View style={{ width: "45%" }}>
-                                <Divider/>
+                                <Divider />
                             </View>
                         </View>
                         <View style={{ width: "85%", alignSelf: "center" }}>
                             <View style={{ width: "100%", height: 65, flexDirection: "column", marginTop: 25 }}>
-                                <TouchableHighlight 
+                                <TouchableHighlight
                                     onPress={() => navigation.navigate("signup")}
                                     style={{ width: "100%", backgroundColor: Colors.secondaryColor, height: 46, borderRadius: Dims.borderradius, justifyContent: "center", alignContent: "center", alignItems: "center" }}>
                                     <Text style={{ color: Colors.whiteColor, fontFamily: "mons" }}>Créer un compte</Text>
@@ -228,7 +228,7 @@ export const SigninScreen = ({ navigation, route }) => {
                         </View>
                     </View>
                 </ScrollView>
-                <Footer/>
+                <Footer />
                 <DialogBox ref={ref} isOverlayClickClose={false} />
             </View>
         </>

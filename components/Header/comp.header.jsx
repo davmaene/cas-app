@@ -7,7 +7,7 @@ import { appname, longappname } from '../../assets/configs/configs';
 export const Header = ({ colors }) => {
     return(
         <>
-            <StatusBar backgroundColor={ Colors.primaryColor } barStyle={ colors ? "light-content" : "default" } />
+            <StatusBar backgroundColor={ Colors.whiteColor } barStyle={ colors ? "dark-content" : "default" } />
             <View style={{ padding: 10, alignContent: "center", alignSelf: "center", marginTop: 12, height: 150, justifyContent: "center" }}>
                 <Text style={{ fontFamily: "mons-b", textAlign: "center", fontSize: 20, color: colors ? colors : Colors.primaryColor }}>{appname} <Text>{longappname}</Text></Text>
                 <Text style={{ textAlign: "center", fontFamily: "mons-e", color: colors ? colors : Colors.primaryColor }} >Faites vos booking, avec nous et vous ne serez jamais deçu</Text>
