@@ -6,7 +6,7 @@ import { Footer } from '../../components/Footer/comp.footer';
 import { Header } from '../../components/Header/comp.header';
 import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons';
 import { btn, inputGroup } from '../../assets/styles/Styles';
-import { Divider } from 'react-native-paper';
+import { Divider } from 'react-native-elements';
 import Toast from 'react-native-toast-message';
 import { onRunExternalRQST, onRunInsertQRY } from '../../services/communications';
 import DialogBox from 'react-native-dialogbox';
@@ -138,7 +138,7 @@ export const SigninScreen = ({ navigation, route }) => {
             <View style={{ flex: 1, backgroundColor: Colors.whiteColor }}>
                 <Header colors={Colors.primaryColor} />
                 <ScrollView
-                    contentContainerStyle={{ paddingBottom: 0, backgroundColor: Colors.primaryColor }}
+                    contentContainerStyle={{ paddingBottom: 0, backgroundColor: Colors.whiteColor }}
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
                 >
@@ -184,7 +184,7 @@ export const SigninScreen = ({ navigation, route }) => {
                                         onSubmit()
                                     }}
                                     disabled={isloading}
-                                    underlayColor={Colors.whiteColor}
+                                    underlayColor={Colors.primaryColor}
                                     style={btn}
                                 >
                                     {isloading
@@ -200,14 +200,14 @@ export const SigninScreen = ({ navigation, route }) => {
                             </View>
                         </View>
                         <View style={{ flexDirection: "row", width: "85%", alignSelf: "center", alignContent: "center", alignItems: "center", justifyContent: "space-between" }}>
-                            <View style={{ width: "45%" }}>
+                            <View style={{ width: "25%" }}>
                                 <Divider />
                             </View>
                             <View>
                                 <Text style={{ fontFamily: "mons-b", color: Colors.primaryColor }}>OU</Text>
                             </View>
-                            <View style={{ width: "45%" }}>
-                                <Divider />
+                            <View style={{ width: "25%" }}>
+                                <Divider  />
                             </View>
                         </View>
                         <View style={{ width: "85%", alignSelf: "center" }}>
