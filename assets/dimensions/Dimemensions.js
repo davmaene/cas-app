@@ -6,7 +6,7 @@ export const Dims = {
     bigtitletextsize: 25,
     titletextsize: 16,
     subtitletextsize: 13,
-    borderradius: 35,
+    borderradius: 2,
     iputtextsize: 14,
     bigradius: 35,
     smallradius: 20,
