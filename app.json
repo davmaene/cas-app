@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "CAS",
+    "slug": "cas-app",
+    "version": "1.0.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cas.app",
+      "buildNumber": "1.0.1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "CAS démande accès à la camera pour scanner le QRCode au processus de paiement de transport",
+        "NSPhotoLibraryUsageDescription": "CAS démande un accès à votre librairie pour vous pemettre de séléctionner une image de profile",
+        "NSUserActivityTypes": [
+          "INSendMessageIntent"
+        ]
+      }
+    },
+    "android": {
+      "package": "com.cas.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#ffffff",
+          "mode": "production"
+        }
+      ]
+    ]
+  }
+}
