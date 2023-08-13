@@ -67,7 +67,7 @@ export const TabBottom = () => {
           size = 17;
           let iconName;
           switch (route.name) {
-            case 'Acceuil'://<Ionicons name={iconName} size={size} color={color} />;
+            case 'home'://<Ionicons name={iconName} size={size} color={color} />;
               iconName = focused
                 ? 'apps'
                 : 'apps-outline';
@@ -114,19 +114,7 @@ export const TabBottom = () => {
                 </>
               )
               break;
-            case 'Messagerie':
-              iconName = focused
-                ? 'md-chatbubbles'
-                : 'md-chatbubbles-outline';
-              return <Ionicons name={iconName} size={size} color={color} />;
-              break;
-            case 'Intervation':
-              iconName = focused
-                ? "ambulance"
-                : "ambulance";
-              return <MaterialCommunityIcons name={iconName} size={size} color={color} />
-              break;
-            case 'Profile':
+            case 'profile':
               iconName = focused
                 ? "user"
                 : "user";
@@ -137,6 +125,12 @@ export const TabBottom = () => {
                 ? 'bookmark'
                 : 'bookmark';
               return <FontAwesome name={iconName} size={size} color={color} />;
+              break;
+            case 'about':
+              iconName = focused
+                ? 'information-circle-outline'
+                : 'information-circle';
+              return <Ionicons name={iconName} size={size} color={color} />;
               break;
             default:
               iconName = focused
@@ -168,10 +162,10 @@ export const TabBottom = () => {
     >
       {/* <Tab.Screen name="Messagerie" component={ChatScreen} /> */}
       {/* <Tab.Screen name="intervation" component={IntervationScreen} /> */}
-      <Tab.Screen name="Acceuil" component={HomeScreen} options={{ tabBarLabel: "" }} />
-      <Tab.Screen name="Profile" component={ProfileScreen} options={{ tabBarLabel: "Moi" }} />
+      <Tab.Screen name="home" component={HomeScreen} options={{ tabBarLabel: "" }} />
+      <Tab.Screen name="profile" component={ProfileScreen} options={{ tabBarLabel: "Moi" }} />
       <Tab.Screen name="bookings" component={FeedScreen} options={{ tabBarLabel: "Mes reservations" }} />
-      <Tab.Screen name="A Propos" component={AboutScreen} />
+      <Tab.Screen name="about" component={AboutScreen} options={{ tabBarLabel: "A propos" }} />
     </Tab.Navigator>
   );
 };
