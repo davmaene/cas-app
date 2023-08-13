@@ -12,7 +12,7 @@ import * as Linking from 'expo-linking';
 const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 
 export const Title = ({ title, subtitle, action, navigation }) => {
-    
+
     const [visible, setVisible] = React.useState(false);
     const ref = React.useRef();
     const openMenu = () => setVisible(true);
@@ -37,7 +37,7 @@ export const Title = ({ title, subtitle, action, navigation }) => {
                     <></>
                 }
                 <Appbar.Content
-                    title={<Text style={{ fontFamily: "mons", fontSize: Dims.subtitletextsize }}>{title}</Text>}
+                    title={<Text style={{ fontFamily: "mons-b", fontSize: Dims.subtitletextsize }}>{title}</Text>}
                     subtitle={<Text style={{ fontFamily: "mons-e", fontSize: Dims.subtitletextsize }}>{subtitle}</Text>} />
                 <Appbar.Action icon={MORE_ICON} onPress={() => openMenu()} />
             </Appbar.Header>

@@ -26,10 +26,26 @@ export const HomeScreen = ({ navigation }) => {
     const ref = React.useRef();
 
 
-    return(
+    return (
         <View style={{ backgroundColor: Colors.whiteColor, flex: 1 }}>
-            <StatusBar barStyle={"dark-content"} backgroundColor={ Colors.whiteColor } />
-
+            <StatusBar barStyle={"dark-content"} backgroundColor={Colors.whiteColor} />
+            <View style={{ paddingHorizontal: 20 }}>
+                <View style={[inputGroup.container, { flexDirection: "row-reverse", borderRadius: 60 }]}>
+                    <TouchableHighlight
+                        underlayColor={Colors.whiteColor}
+                        onPress={() => {}}
+                        style={[inputGroup.iconcontainer, { backgroundColor: Colors.pillColor }]}
+                    >
+                        <Ionicons name={"search"} size={Dims.iconsize} color={Colors.primaryColor} />
+                    </TouchableHighlight>
+                    <View style={[inputGroup.inputcontainer, { width: "80%" }]}>
+                        <TextInput placeholder='Entrer un mot de recherche ici...' enablesReturnKeyAutomatically onChangeText={(t) => setpassword(t)} style={[inputGroup.input, { fontFamily: "mons" }]} />
+                    </View>
+                    <View style={[inputGroup.iconcontainer, { backgroundColor: Colors.primaryColor }]}>
+                        <Entypo name="lock" size={Dims.iconsize} color={Colors.whiteColor} />
+                    </View>
+                </View>
+            </View>
         </View>
     )
 }
