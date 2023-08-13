@@ -6,8 +6,10 @@ const dangerColor = "#FF1F00"
 const whiteColor = "#FFFF"
 const darkColor = "#474747"
 const placeHolderColor= "#9C9696";
+const inactiveColor = "#868686";
 
 export const Colors = {
+    inactiveColor,
     placeHolderColor,
     primaryColor,
     secondaryColor,
