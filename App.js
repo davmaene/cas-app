@@ -32,10 +32,8 @@ export default function App() {
           <Stack.Screen name="tabs" component={TabBottom} />
           <Stack.Screen name="signin" component={SigninScreen} />
           <Stack.Screen name="signup" component={SignupScreen} />
-          <Stack.Screen name="profile" component={ProfileScreen} />
           <Stack.Screen name="settings" component={SettingScreen} />
           <Stack.Screen name="verifyaccount" component={VerifyaccountScreen} />
-          <Stack.Screen name="intervention" component={IntervationScreen} />
         </Stack.Navigator>
       </NavigationContainer>
       <Toast config={toastConfig} />
