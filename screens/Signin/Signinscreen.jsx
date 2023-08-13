@@ -207,22 +207,22 @@ export const SigninScreen = ({ navigation, route }) => {
                                 <Text style={{ fontFamily: "mons-b", color: Colors.primaryColor }}>OU</Text>
                             </View>
                             <View style={{ width: "25%" }}>
-                                <Divider  />
+                                <Divider />
                             </View>
                         </View>
                         <View style={{ width: "85%", alignSelf: "center" }}>
-                            <View style={{ width: "100%", height: 65, flexDirection: "column", marginTop: 25 }}>
-                                <TouchableHighlight
-                                    onPress={() => navigation.navigate("signup")}
-                                    style={{ width: "100%", backgroundColor: Colors.secondaryColor, height: 46, borderRadius: Dims.borderradius, justifyContent: "center", alignContent: "center", alignItems: "center" }}>
-                                    <Text style={{ color: Colors.whiteColor, fontFamily: "mons" }}>Créer un compte</Text>
+                            <View style={{ width: "100%", height: 65, flexDirection: "column", marginTop: 20 }}>
+                                <TouchableHighlight style={{ width: "100%", backgroundColor: Colors.pillColor, height: 46, borderRadius: Dims.borderradius, justifyContent: "center", alignContent: "center", alignItems: "center" }}>
+                                    <Text style={{ color: Colors.primaryColor, fontFamily: "mons-b" }}>Continuer sans se connecter</Text>
                                 </TouchableHighlight>
                             </View>
                         </View>
-                        <View style={{ width: "85%", alignSelf: "center" }}>
-                            <View style={{ width: "100%", height: 65, flexDirection: "column", marginTop: 2 }}>
-                                <TouchableHighlight style={{ width: "100%", backgroundColor: Colors.pillColor, height: 46, borderRadius: Dims.borderradius, justifyContent: "center", alignContent: "center", alignItems: "center" }}>
-                                    <Text style={{ color: Colors.primaryColor, fontFamily: "mons-b" }}>Mot de passe oublié ?</Text>
+                        <View style={{ width: "85%", alignSelf: "center", display: "none" }}>
+                            <View style={{ width: "100%", height: 65, flexDirection: "column", marginTop: 10 }}>
+                                <TouchableHighlight
+                                    onPress={() => navigation.navigate("signup")}
+                                    style={{ width: "100%", backgroundColor: Colors.pillColor, height: 46, borderRadius: Dims.borderradius, justifyContent: "center", alignContent: "center", alignItems: "center" }}>
+                                    <Text style={{ color: Colors.whiteColor, fontFamily: "mons" }}>Créer un compte</Text>
                                 </TouchableHighlight>
                             </View>
                         </View>
