@@ -7,6 +7,7 @@ export const Footer = () => {
     const [shown, setshown] = React.useState(true);
 
     React.useEffect(() => {
+
         Keyboard.addListener("keyboardDidHide", e => {
             setshown(true)
         });
@@ -22,7 +23,7 @@ export const Footer = () => {
         shown 
         ? 
             <View style={{position: "absolute", bottom: "0%", width: "100%", backgroundColor: Colors.whiteColor, paddingVertical: 10, alignItems: "center", alignSelf: "center"}}>
-                <Text style={{ fontFamily: "mons-b", fontSize: 10, textAlign: "center" }}>&copy; {appname} | {longappname} {new Date().getFullYear()} </Text>
+                <Text style={{ fontFamily: "mons-e", fontSize: 10, textAlign: "center" }}>&copy; {appname} | {longappname} {new Date().getFullYear()} </Text>
             </View> 
         :
             <></> 

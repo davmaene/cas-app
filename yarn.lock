@@ -3156,6 +3156,11 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
+dm-handlesearch@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/dm-handlesearch/-/dm-handlesearch-1.0.3.tgz#6ea6bbd0ad47cdf494618aaf332ec35a48b90708"
+  integrity sha512-mEQiPRhxjXgHWM4gDcjsNHaRAIwrA3rEXjW3cdwzOG3CP2gmn8onjyFfWEafexklQQ4eVDMsbDeDBpMVdQFNPA==
+
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"

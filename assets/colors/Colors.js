@@ -1,5 +1,5 @@
-const primaryColor = "#018137" || "#2967ff"
-const secondaryColor = "#ffffff" || "#c822ff"
+const primaryColor = "#018137"
+const secondaryColor = "#ffffff"
 const pillColor = "#EEEEEE"
 const successColor = "#73C912"
 const dangerColor = "#FF1F00"

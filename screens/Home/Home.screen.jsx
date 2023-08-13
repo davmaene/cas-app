@@ -27,9 +27,9 @@ export const HomeScreen = ({ navigation }) => {
 
 
     return(
-        <>
-            <StatusBar barStyle={"light-content"} backgroundColor={ Colors.primaryColor } />
+        <View style={{ backgroundColor: Colors.whiteColor, flex: 1 }}>
+            <StatusBar barStyle={"dark-content"} backgroundColor={ Colors.whiteColor } />
 
-        </>
+        </View>
     )
 }

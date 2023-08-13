@@ -28,12 +28,14 @@ export default function App() {
             headerShown: false
           }}
         >
+          
           <Stack.Screen name="loading" component={LoadingSceen} />
           <Stack.Screen name="tabs" component={TabBottom} />
           <Stack.Screen name="signin" component={SigninScreen} />
           <Stack.Screen name="signup" component={SignupScreen} />
           <Stack.Screen name="settings" component={SettingScreen} />
           <Stack.Screen name="verifyaccount" component={VerifyaccountScreen} />
+
         </Stack.Navigator>
       </NavigationContainer>
       <Toast config={toastConfig} />
