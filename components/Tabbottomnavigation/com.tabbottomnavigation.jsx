@@ -64,7 +64,7 @@ export const TabBottom = () => {
       initialRouteName='Acceuil'
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          size = 17;
+          size = 20;
           let iconName;
           switch (route.name) {
             case 'home'://<Ionicons name={iconName} size={size} color={color} />;
@@ -90,7 +90,7 @@ export const TabBottom = () => {
                         borderTopStartRadius: 60,
                         elevation: 2
                       }}>
-                        <Image source={require("../../assets/keyicon.png")} style={{ width: 55, resizeMode: "center" }} />
+                        <Image source={require("../../assets/keyicon.png")} style={{ marginTop: 10, width: 55, resizeMode: "center" }} />
                       </View>
                     )
                     :
@@ -107,7 +107,7 @@ export const TabBottom = () => {
                         borderTopStartRadius: 60,
                         elevation: 2
                       }}>
-                        <Image source={require("../../assets/keyicondark.png")} style={{ width: 55, resizeMode: "center" }} />
+                        <Image source={require("../../assets/keyicondark.png")} style={{ marginTop: 10, width: 55, resizeMode: "center" }} />
                       </View>
                     )
                   }
@@ -160,8 +160,6 @@ export const TabBottom = () => {
         }
       })}
     >
-      {/* <Tab.Screen name="Messagerie" component={ChatScreen} /> */}
-      {/* <Tab.Screen name="intervation" component={IntervationScreen} /> */}
       <Tab.Screen name="home" component={HomeScreen} options={{ tabBarLabel: "" }} />
       <Tab.Screen name="profile" component={ProfileScreen} options={{ tabBarLabel: "Moi" }} />
       <Tab.Screen name="bookings" component={FeedScreen} options={{ tabBarLabel: "Mes reservations" }} />
