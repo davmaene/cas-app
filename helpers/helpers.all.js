@@ -1,3 +1,6 @@
+import moment from "moment";
+moment.locale("fr");
+
 export const shuffleArray = ({ array }) => {
     const shuffledArray = [...array];
     for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -73,3 +76,5 @@ export const flights = [
         label: "rgb(252, 178, 50)"
     }
 ];
+
+export const now = () => moment().format("L");

@@ -7,6 +7,7 @@ import { btn, inputGroup } from '../../assets/styles/Styles';
 import { AntDesign, Entypo, Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
 import { Header } from '../../components/Header/comp.header';
 import { Divider } from 'react-native-elements';
+import { now } from '../../helpers/helpers.all';
 
 export const HomeScreen = ({ navigation }) => {
 
@@ -45,6 +46,7 @@ export const HomeScreen = ({ navigation }) => {
                             :
                             <></>
                         }
+                        
                         <View View style={{ width: "100%", alignSelf: "center" }}>
                             <View style={{ width: "100%", height: 65, flexDirection: "column", marginTop: 10 }}>
                                 <TouchableHighlight
@@ -56,6 +58,15 @@ export const HomeScreen = ({ navigation }) => {
                             </View>
                         </View>
                         <Divider />
+                        <>
+                            <View style={{ paddingVertical: 5, marginTop: 20 }}>
+                                <Text style={{ fontFamily: "mons-b", fontSize: Dims.titletextsize }}>Vols disponibles</Text>
+                                <Text style={{ fontFamily: "mons-e" }}>Vols disponible pour | <Text>{now()}</Text></Text>
+                            </View>
+                            <View>
+
+                            </View>
+                        </>
                     </>
                 </ScrollView>
             </View >
