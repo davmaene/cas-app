@@ -23,15 +23,8 @@ const aradius = 130;
 const r = aradius / 2;
 
 export const HomeScreen = ({ navigation }) => {
-    const fadeAnim = React.useRef(new Animated.Value(0)).current;
-    const [message, setmessage] = React.useState("Un signal d'alerte est émis dans les établissements sanitaires");
-    const [isloading, setisloading] = React.useState(false);
-    const [showmodal, setshowmodal] = React.useState(false);
-    const [shw, setshw] = React.useState(false);
-    const [messagecustomer, setmessagecustomer] = React.useState("");
     const ref = React.useRef();
-    const [before, setbefore] = React.useState(false);
-    const [sending, setsending] = React.useState(false);
+
 
     return(
         <>
