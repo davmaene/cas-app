@@ -9,6 +9,7 @@ import { Divider, Image } from 'react-native-elements';
 import { flights, now, shuffleArray } from '../../helpers/helpers.all';
 import { RefreshControl } from 'react-native';
 import { FlatList } from 'react-native';
+import { handleSearch } from 'dm-handlesearch';
 
 export const HomeScreen = ({ navigation }) => {
 
@@ -16,6 +17,8 @@ export const HomeScreen = ({ navigation }) => {
     const [canshow, setcanshow] = React.useState(false);
     const [isloading, setisloading] = React.useState(false);
     const [flghts, setflights] = React.useState(shuffleArray({ array: flights }));
+    const [temp, settemp] = React.useState([]);
+    // const [keyword, setkeyword] = React.useState("")
 
     const renderItem = ({ item }) => {
         const { dep } = item;
@@ -67,8 +70,23 @@ export const HomeScreen = ({ navigation }) => {
 
     const onLoadFligts = async () => {
         setisloading(true);
-        setflights(shuffleArray({ array: flights }))
-        setisloading(false)
+        setflights(shuffleArray({ array: flights }));
+        settemp(flights)
+        setisloading(false);
+    }
+
+    const _performSearch = async ({ keyword }) => {
+        setisloading(true);
+        handleSearch({
+            rows: temp,
+            columns: ['from', 'to'],
+            keyword,
+            cb: ({ rows, length, keyword }) => {
+                setisloading(false)
+                console.log("Table is ==> ", length);
+                setflights(rows)
+            }
+        })
     }
 
     React.useEffect(() => {
@@ -99,7 +117,12 @@ export const HomeScreen = ({ navigation }) => {
                                         <Ionicons name={"search"} size={Dims.iconsize} color={Colors.primaryColor} />
                                     </TouchableHighlight>
                                     <View style={[inputGroup.inputcontainer, { width: "80%" }]}>
-                                        <TextInput placeholder='Entrer un mot de recherche ici...' enablesReturnKeyAutomatically onChangeText={(t) => setpassword(t)} style={[inputGroup.input, { fontFamily: "mons" }]} />
+                                        <TextInput
+                                            placeholder='Entrer un mot de recherche ici...'
+                                            enablesReturnKeyAutomatically
+                                            onChangeText={(t) => _performSearch({ keyword: t })}
+                                            style={[inputGroup.input, { fontFamily: "mons" }]}
+                                        />
                                     </View>
                                     <View style={[inputGroup.iconcontainer, { backgroundColor: Colors.primaryColor }]}>
                                         <Entypo name="lock" size={Dims.iconsize} color={Colors.whiteColor} />
