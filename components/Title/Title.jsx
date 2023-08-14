@@ -25,7 +25,6 @@ export const Title = ({ title, subtitle, action, navigation }) => {
                 style={{ backgroundColor: Colors.primaryColor }}
             >
                 {navigation
-
                     ?
                     <Appbar.Action
                         icon="arrow-left-circle" onPress={() => {
