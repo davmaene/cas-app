@@ -13,10 +13,10 @@ export const LoadingSceen = ({ navigation }) => {
     const loadFonts = async () => {
 
       await Fonts.loadAsync({
-        "mons-e": require("../../assets/fonts/MontserratAlternates-ExtraLight.ttf"),
+        "mons-e": require("../../assets/fonts/Nexa-Light.otf"),
         "mons-a": require("../../assets/fonts/MontserratAlternates-Bold.ttf"),
-        "mons": require("../../assets/fonts/MontserratAlternates-SemiBold.ttf"),
-        "mons-b": require("../../assets/fonts/Montserrat-SemiBold.ttf")
+        "mons": require("../../assets/fonts/Nexa-Light.otf"),
+        "mons-b": require("../../assets/fonts/Nexa-Bold.otf")
       });
 
       await onRunRetrieveQRY({ table: "__tbl_users", limit: 1 }, (er, done) => {

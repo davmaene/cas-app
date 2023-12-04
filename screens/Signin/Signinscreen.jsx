@@ -10,7 +10,6 @@ import { Divider } from 'react-native-elements';
 import Toast from 'react-native-toast-message';
 import { onRunExternalRQST, onRunInsertQRY } from '../../services/communications';
 import DialogBox from 'react-native-dialogbox';
-import { LoadingSceen } from '../Loading/LoadingScreen';
 import { Loader } from '../../components/Loader/comp.loader';
 
 export const SigninScreen = ({ navigation, route }) => {
@@ -30,9 +29,9 @@ export const SigninScreen = ({ navigation, route }) => {
                 try {
                     await onRunExternalRQST({
                         method: "POST",
-                        url: "/users/user/signin",
+                        url: "?op=login&",
                         data: {
-                            phone: num,
+                            username: num,
                             password
                         }
                     }, (err, done) => {
@@ -128,7 +127,7 @@ export const SigninScreen = ({ navigation, route }) => {
             Toast.show({
                 type: 'error',
                 text1: 'Erreur',
-                text2: 'Entrer un numéro de téléphone valide',
+                text2: 'Entrer un nom d\'utilisateur !',
             });
         }
     };
@@ -145,16 +144,16 @@ export const SigninScreen = ({ navigation, route }) => {
                     <View style={{ borderTopEndRadius: Dims.bigradius, borderTopStartRadius: Dims.bigradius, backgroundColor: Colors.whiteColor, height: Dims.height, marginTop: Dims.smallradius }}>
                         <View style={{ width: "85%", alignSelf: "center", marginTop: Dims.bigradius }}>
                             <View style={{ width: "100%", height: 65, flexDirection: "column" }}>
-                                <Text style={{ fontFamily: "mons-b", paddingLeft: 10, color: Colors.primaryColor }}>Numéro de téléphone</Text>
+                                <Text style={{ fontFamily: "mons-b", paddingLeft: 10, color: Colors.primaryColor }}>Nom d'utilisateur</Text>
                                 <View style={[inputGroup.container, { flexDirection: "row-reverse" }]}>
                                     <View style={{ width: "80%", justifyContent: "center", alignContent: "center", alignItems: "center", flexDirection: "row" }}>
-                                        <View style={{ height: "100%", justifyContent: "center", backgroundColor: Colors.pillColor }}>
+                                        {/* <View style={{ height: "100%", justifyContent: "center", backgroundColor: Colors.pillColor }}>
                                             <Text style={{ paddingLeft: 25, fontFamily: "mons", color: Colors.primaryColor }}>+243</Text>
-                                        </View>
-                                        <TextInput placeholder='000 000 000' maxLength={10} keyboardType={"number-pad"} onChangeText={(t) => setnum(t)} style={[inputGroup.input, { fontFamily: "mons", width: "85%" }]} />
+                                        </View> */}
+                                        <TextInput placeholder='Utilisateur' keyboardType={"number-pad"} onChangeText={(t) => setnum(t)} style={[inputGroup.input, { fontFamily: "mons", width: "100%" }]} />
                                     </View>
                                     <View style={[inputGroup.iconcontainer, { backgroundColor: Colors.primaryColor }]}>
-                                        <Entypo name="phone" size={Dims.iconsize} color={Colors.whiteColor} />
+                                        <Entypo name="user" size={Dims.iconsize} color={Colors.whiteColor} />
                                     </View>
                                 </View>
                             </View>
@@ -191,7 +190,7 @@ export const SigninScreen = ({ navigation, route }) => {
                                         ?
                                         <Loader />
                                         :
-                                        <Text style={{ color: Colors.whiteColor, fontFamily: "mons" }}>Connexion</Text>
+                                        <Text style={{ color: Colors.whiteColor, fontFamily: "mons-b" }}>Connexion</Text>
                                     }
                                 </TouchableHighlight>
                                 <Text style={{ fontFamily: "mons", fontSize: Dims.subtitletextsize, marginVertical: 10, color: Colors.dangerColor, textAlign: "center" }}>
@@ -214,21 +213,30 @@ export const SigninScreen = ({ navigation, route }) => {
                             <View style={{ width: "100%", height: 65, flexDirection: "column", marginTop: 20 }}>
                                 <TouchableHighlight
                                     underlayColor={Colors.pillColor}
-                                    onPress={() => navigation.navigate("tabs")}
+                                    onPress={() => {
+                                        // navigation.navigate("tabs")
+                                        Toast.show({
+                                            type: 'info',
+                                            text1: 'Non permis',
+                                            text2: 'Cette fonctionnalité ne pas pris en charge ! pour le moment',
+                                        })
+                                    }}
                                     style={{ width: "100%", backgroundColor: Colors.pillColor, height: 46, borderRadius: Dims.borderradius, justifyContent: "center", alignContent: "center", alignItems: "center" }}>
-                                    <Text style={{ color: Colors.primaryColor, fontFamily: "mons-b" }}>Continuer sans se connecter</Text>
+                                    <Text style={{ color: Colors.primaryColor, fontFamily: "mons-b" }}>Créer un compte</Text>
                                 </TouchableHighlight>
                             </View>
                         </View>
-                        <View style={{ width: "85%", alignSelf: "center", display: "none" }}>
+                        {/* <View style={{ width: "85%", alignSelf: "center", display: "none" }}>
                             <View style={{ width: "100%", height: 65, flexDirection: "column", marginTop: 10 }}>
                                 <TouchableHighlight
-                                    onPress={() => navigation.navigate("signup")}
+                                    onPress={() => {
+                                        navigation.push("tabs")
+                                    }}
                                     style={{ width: "100%", backgroundColor: Colors.pillColor, height: 46, borderRadius: Dims.borderradius, justifyContent: "center", alignContent: "center", alignItems: "center" }}>
                                     <Text style={{ color: Colors.whiteColor, fontFamily: "mons" }}>Créer un compte</Text>
                                 </TouchableHighlight>
                             </View>
-                        </View>
+                        </View> */}
                     </View>
                 </ScrollView>
                 <Footer />
