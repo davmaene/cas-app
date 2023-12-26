@@ -100,43 +100,21 @@ export const onRunRetrieveQRY = async ({ table, limit }, cb) => {
 };
 
 export const onRunExternalRQST = async ({ url, data, method, type }, cb) => {
+    console.log(data, method);
     try {
-        try {
-            await fetch(`${endpoint}${url}`, {
-                method,
-                headers: {
-                    'Content-type': 'application/x-www-form-urlencoded',
-                },
-                body: data ? data : null
-            }).then(reponse => reponse.json())
-                .then(data => {
-                    return cb(undefined, data)
-                })
-                .catch(err => {
-                    return cb(err, undefined)
-                })
-        } catch (error) {
-            setIsLoading(false);
-            handleError(error);
-        }
-        // await axios({
-        //     timeout,
-        //     method: method ? method : "GET",
-        //     data: data || null,
-        //     url: `${endpoint}${url}`,
-        //     // headers: {
-        //     //     'Content-type': 'application/x-www-form-urlencoded'
-        //     // }
-        //     // headers: {
-        //     //     ...type
-        //     // }
-        // })
-        //     .then(res => {
-        //         return cb(undefined, res['data'])
-        //     })
-        //     .catch(err => {
-        //         return cb(err, undefined)
-        //     })
+        await fetch(`${endpoint}${url}`, {
+            method,
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded',
+            },
+            body: data ? data : null
+        }).then(reponse => reponse.json())
+            .then(data => {
+                return cb(undefined, data)
+            })
+            .catch(err => {
+                return cb(err, undefined)
+            })
     } catch (error) {
         return cb(error, undefined)
     }

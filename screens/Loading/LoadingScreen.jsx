@@ -22,8 +22,7 @@ export const LoadingSceen = ({ navigation }) => {
     await onRunRetrieveQRY({ table: "__tbl_users", limit: 1 }, (er, done) => {
       if (done && done['length'] > 0) {
         global.user = done[0];
-        console.log(done);
-        navigation.replace("signin");//tabs
+        navigation.replace("tabs");//
       } else navigation.replace("signin");
     });
     setappready(true);
