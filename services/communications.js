@@ -99,6 +99,35 @@ export const onRunRetrieveQRY = async ({ table, limit }, cb) => {
     }
 };
 
+export const onDeconnextion = async (cb) => {
+    try {
+        db.transaction(
+            (tx) => {
+                tx.executeSql(`delete from __tbl_users where id <> 0`, null);
+                // tx.executeSql(`delete from __tbl_chats where id <> 0`, null);
+                // tx.executeSql(`delete from __tbl_historiques where id <> 0`, null);
+                // tx.executeSql(`delete from __tbl_champs where id <> 0`, null);
+                // tx.executeSql(`delete from __tbl_backup_champs where id <> 0`, null);
+                // tx.executeSql(`delete from __tbl_backup_agriculteurs where id <> 0`, null);
+                // tx.executeSql(`delete from __tbl_backup_provinces where id <> 0`, null);
+                // tx.executeSql(`delete from __tbl_backup_territoires where id <> 0`, null);
+                // tx.executeSql(`delete from __tbl_backup_villages where id <> 0`, null);
+                // tx.executeSql(`delete from __tbl_backup_cultures where id <> 0`, null);
+            },
+            err => {
+                cb(err, undefined)
+            },
+            done => cb(undefined, "done"),
+            err => {
+                console.log("Error on deconnexion => ", err);
+            }
+        );
+    } catch (error) {
+        console.log(" Error ", error);
+        cb(error, undefined)
+    }
+};
+
 export const onRunExternalRQST = async ({ url, data, method, type }, cb) => {
     console.log(data, method);
     try {

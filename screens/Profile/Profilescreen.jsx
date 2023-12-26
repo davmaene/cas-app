@@ -17,6 +17,7 @@ import { SpinerStyle, containerIcon } from '../../assets/styles/Styles';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Loader } from '../../components/Loader/comp.loader';
 import { nowInInix } from '../../assets/helpers/helpers.all';
+import RNRestart from 'react-native-restart';
 
 export const ProfileScreen = ({ navigation }) => {
 
@@ -45,7 +46,7 @@ export const ProfileScreen = ({ navigation }) => {
                                 text1: 'Déconnexion',
                                 text2: 'Vos informations sont supprimées avec succès !',
                             });
-                            Updates.reloadAsync()
+                            RNRestart.Restart()
                         } else {
                             Toast.show({
                                 type: 'error',
@@ -177,7 +178,7 @@ export const ProfileScreen = ({ navigation }) => {
             <StatusBar animated={true} barStyle={'light-content'} backgroundColor={Colors.primaryColor} />
             <View style={{ flexDirection: "row", paddingTop: 10, backgroundColor: Colors.primaryColor, paddingHorizontal: 12, alignContent: "center", alignItems: "center", justifyContent: "space-between", paddingVertical: 10 }}>
                 <Text style={{ fontFamily: "mons", fontSize: Dims.titletextsize, paddingLeft: 10, color: Colors.whiteColor }}>Profile </Text>
-                <TouchableHighlight
+                {/* <TouchableHighlight
                     style={{ padding: 5, flexDirection: "row", alignContent: "center", alignItems: "center" }}
                     onPress={() => navigation.navigate("edit-profile")}
                     underlayColor={"transparent"}
@@ -185,7 +186,7 @@ export const ProfileScreen = ({ navigation }) => {
                     <>
                         <AntDesign name="edit" size={Dims.iconsize} color={Colors.pillColor} />
                     </>
-                </TouchableHighlight>
+                </TouchableHighlight> */}
             </View>
             <LinearGradient
                 colors={[Colors.primaryColor, Colors.primaryColor]}
@@ -195,19 +196,19 @@ export const ProfileScreen = ({ navigation }) => {
                     <View style={{ width: "100%", alignContent: "center", alignItems: "center", flexDirection: "column", paddingHorizontal: 20 }}>
                         <Avatar
                             rounded
-                            title={<Text style={{ fontFamily: "mons-b", textTransform: "uppercase", color: Colors.primaryColor }}>{returnInitialOfNames({ fsname: user && user['fsname'], lsname: user && user['lsname'] })}</Text>}
+                            title={<Text style={{ fontFamily: "mons-b", textTransform: "uppercase", color: Colors.primaryColor }}>{returnInitialOfNames({ fsname: user && user['fullname'], lsname: user && user['fullname'] })}</Text>}
                             size={60}
                             containerStyle={{ backgroundColor: Colors.pillColor, borderColor: Colors.primaryColor }}
                         />
                         <View style={{ marginTop: 10, alignContent: "center", alignItems: "center" }}>
-                            <Text style={{ fontFamily: "mons-b", fontSize: Dims.titletextsize, textTransform: "uppercase", color: Colors.pillColor }}>{user && user['nom']} {user && user['postnom']}</Text>
+                            <Text style={{ fontFamily: "mons-b", fontSize: Dims.titletextsize, textTransform: "uppercase", color: Colors.pillColor }}>{user && user['fullname']}</Text>
                             <View style={{ flexDirection: "row", alignContent: "center", alignItems: "center" }}>
-                                <Zocial name="call" size={Dims.iconsize - 5} color={Colors.whiteColor} />
-                                <Text style={{ fontFamily: "mons", color: Colors.pillColor, fontSize: Dims.subtitletextsize, paddingHorizontal: 5, textAlign: "center" }}>
-                                    {user && user['phone']}
+                                {/* <Zocial name="call" size={Dims.iconsize - 5} color={Colors.whiteColor} /> */}
+                                <Text style={{ fontFamily: "mons", textTransform: "capitalize", color: Colors.pillColor, fontSize: Dims.subtitletextsize, paddingHorizontal: 5, textAlign: "center" }}>
+                                    {user && user['username']}
                                 </Text>
                             </View>
-                            {showmore &&
+                            {/* {showmore &&
                                 (
                                     <View>
                                         {user && user['email'] && emailValidator({ email: user && user['email'] }) &&
@@ -242,8 +243,8 @@ export const ProfileScreen = ({ navigation }) => {
                                         }
                                     </View>
                                 )
-                            }
-                            <View style={{ marginTop: 0 }}>
+                            } */}
+                            {/* <View style={{ marginTop: 0 }}>
                                 <TouchableHighlight
                                     style={{ padding: 10 }}
                                     underlayColor={Colors.primaryColor}
@@ -251,14 +252,8 @@ export const ProfileScreen = ({ navigation }) => {
                                 >
                                     <Feather name={showmore ? "arrow-up-circle" : "arrow-down-circle"} size={Dims.iconsize} color={Colors.whiteColor} />
                                 </TouchableHighlight>
-                            </View>
+                            </View> */}
                         </View>
-                    </View>
-                )}
-                {type && type === 2 && (
-                    <View style={{ alignSelf: "center", width: "100%" }}>
-                        <Text style={{ fontFamily: "mons", color: Colors.whiteColor, fontSize: Dims.bigtitletextsize, alignSelf: "center" }}>Type Compte | Supporteur</Text>
-                        <Text style={{ fontFamily: "mons-e", fontSize: Dims.subtitletextsize, alignSelf: "center", color: Colors.pillColor }}>Vous êtes connecté entant que supporteur</Text>
                     </View>
                 )}
             </LinearGradient>
@@ -268,7 +263,7 @@ export const ProfileScreen = ({ navigation }) => {
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
             >
-                <View style={{ marginTop: 30 }}>
+                <View style={{ marginTop: 30, display: "none" }}>
                     <View style={{ padding: 5, marginBottom: 10 }}>
                         <Text style={{ fontFamily: "mons-b", textTransform: "uppercase", color: Colors.darkColor }}>Compte</Text>
                         <Text style={{ fontFamily: "mons-e", textTransform: "lowercase", color: Colors.darkColor, fontSize: Dims.subtitletextsize }}>Personalisation de mon compte | Modification</Text>
@@ -291,7 +286,7 @@ export const ProfileScreen = ({ navigation }) => {
                     </View>
                 </View>
                 {/* ------------------------------------------------ */}
-                <View style={{ marginTop: 30 }}>
+                <View style={{ marginTop: 30, display: "none" }}>
                     <View style={{ padding: 5, marginBottom: 10 }}>
                         <Text style={{ fontFamily: "mons-b", textTransform: "uppercase", color: Colors.darkColor }}>Synchronisation</Text>
                         <Text style={{ fontFamily: "mons-e", textTransform: "lowercase", color: Colors.darkColor, fontSize: Dims.subtitletextsize }}>Synchronisation des information sauvegardées localement</Text>
@@ -338,7 +333,7 @@ export const ProfileScreen = ({ navigation }) => {
                     </View>
                 </View>
                 {/* ------------------------------------------------ */}
-                <View style={{ marginTop: 30 }}>
+                <View style={{ marginTop: 30, display: "none" }}>
                     <View style={{ padding: 5, marginBottom: 10 }}>
                         <Text style={{ fontFamily: "mons-b", textTransform: "uppercase", color: Colors.darkColor }}>utilisation</Text>
                         <Text style={{ fontFamily: "mons-e", textTransform: "lowercase", color: Colors.darkColor, fontSize: Dims.subtitletextsize }}>Manuelle d'utilisation | A propos de {appname} | Condition d'utilisation</Text>
@@ -506,7 +501,7 @@ export const ProfileScreen = ({ navigation }) => {
                         </TouchableHighlight>
                     </View>
                     {/* ---------------------------------------------- */}
-                    <View style={{ padding: 5, marginTop: 4, backgroundColor: Colors.whiteColor }}>
+                    {/* <View style={{ padding: 5, marginTop: 4, backgroundColor: Colors.whiteColor }}>
                         <TouchableHighlight
                             style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}
                         >
@@ -524,7 +519,7 @@ export const ProfileScreen = ({ navigation }) => {
                                 </View>
                             </>
                         </TouchableHighlight>
-                    </View>
+                    </View> */}
                     {/* ------------------------------------------------ */}
                     <View style={{ padding: 5, marginTop: 4, backgroundColor: Colors.whiteColor }}>
                         <TouchableHighlight
@@ -547,7 +542,7 @@ export const ProfileScreen = ({ navigation }) => {
                     </View>
                     {/* ---------------------------------------------- */}
                 </View>
-                <Footer />
+                {/* <Footer /> */}
             </ScrollView>
             {/* < */}
             <DialogBox ref={ref} isOverlayClickClose={true} />
