@@ -33,39 +33,54 @@ export const SigninScreen = ({ navigation, route }) => {
                         url: "/app?op=login&",
                         data: 'username=' + num + '&password=' + password,
                     }, (err, done) => {
-                        // console.log(done, err);
+                        setisloading(false);
                         if (done) {
                             let { message, user } = done;
-                            user = user[0]
-                            delete user['4']
-                            delete user['roles']
-                            setisloading(false);
-                            console.log('====================================');
-                            console.log((user));
-                            console.log('====================================');
-                            if (message.toString() === "Success") {
-                                const u = user;
-                                const { username, userid, shops, photo, fullname, designationid } = user;
-                                onRunInsertQRY({
-                                    table: "__tbl_users",
-                                    columns: `'username', 'fullname', 'userid', 'shops', 'photo', 'designationid', 'crearedon'`,
-                                    dot: "?, ?, ?, ?, ?, ?",
-                                    values: [`${username}`, `${fullname}`, `${userid}`, `${shops}`, `${photo}`, `${designationid}`, `${new Date().toLocaleString()}`]
-                                }, (err, insert) => {
-                                    if (insert) navigation.replace("tabs");
-                                    else {
-                                        setisloading(false);
-                                        setcanverify(true);
-                                        setValue("")
+                            if (Array.isArray(user)) {
+                                if (user.length > 0) {
+                                    user = user[0]
+                                    // delete user['4']
+                                    // delete user['roles']
+                                    if (message.toString() === "Success") {
+                                        const u = user;
+                                        const { username, userid, shops, photo, fullname, designationid } = user;
+                                        onRunInsertQRY({
+                                            table: "__tbl_users",
+                                            columns: `'username', 'fullname', 'userid', 'shops', 'photo', 'designationid', 'crearedon'`,
+                                            dot: "?, ?, ?, ?, ?, ?, ?",
+                                            values: [`${username}`, `${fullname}`, `${userid}`, `${shops}`, `${photo}`, `${designationid}`, `${new Date().toLocaleString()}`]
+                                        }, (err, insert) => {
+                                            if (insert) {
+                                                // console.log("Inserted line is ==> ", insert);
+                                                global.user = insert
+                                                navigation.replace("tabs");
+                                            } else {
+                                                setValue("")
+                                                Toast.show({
+                                                    type: 'error',
+                                                    text1: 'Erreur',
+                                                    text2: 'Une erreur est survenue lors de l\'activation du compte !',
+                                                });
+                                            }
+                                        })
+                                    } else {
+                                        setoutput("Le mot de passe ou le nom d'utilisateur est incorect")
                                         Toast.show({
                                             type: 'error',
                                             text1: 'Erreur',
-                                            text2: 'Une erreur est survenue lors de l\'activation du compte !',
+                                            text2: 'Le mot de passe ou le nom d\'utilisateur incorect',
                                         });
                                     }
-                                })
+                                } else {
+                                    setoutput("Le mot de passe ou le nom d'utilisateur est incorect")
+                                    Toast.show({
+                                        type: 'error',
+                                        text1: 'Erreur',
+                                        text2: 'Le mot de passe ou le nom d\'utilisateur incorect',
+                                    });
+                                }
                             } else {
-                                setoutput("Le mot de passe ou le nom d'utilisateur est incorect")
+                                setoutput("Le mot de passe ou le nom d'utilisateur est incorect !")
                                 Toast.show({
                                     type: 'error',
                                     text1: 'Erreur',

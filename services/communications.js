@@ -39,8 +39,7 @@ export const onRunInsertQRY = async ({ columns, dot, table, values, options }, c
             },
             (err) => {
                 cb(err, undefined)
-            },
-            (line) => cb(undefined, "done adding")
+            }
         );
     } catch (error) {
         return cb(error, undefined)
