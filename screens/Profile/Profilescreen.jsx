@@ -10,7 +10,7 @@ import Toast from 'react-native-toast-message';
 import { onDeconnextion, onRunExternalRQST, onRunInsertQRY, onRunRemoveQRY } from '../../services/communications';
 import * as Updates from 'expo-updates';
 import * as Linking from 'expo-linking';
-import { appname } from '../../assets/configs/configs';
+import { appname, baseURL, endpoint } from '../../assets/configs/configs';
 import { emailValidator, returnInitialOfNames } from '../../assets/helpers/helpers.helpers';
 import { Footer } from '../../components/Footer/comp.footer';
 import { SpinerStyle, containerIcon } from '../../assets/styles/Styles';
@@ -170,7 +170,6 @@ export const ProfileScreen = ({ navigation }) => {
     };
 
     React.useEffect(() => {
-
     }, [])
 
     return (
@@ -195,8 +194,9 @@ export const ProfileScreen = ({ navigation }) => {
                 {user && user['id'] && (
                     <View style={{ width: "100%", alignContent: "center", alignItems: "center", flexDirection: "column", paddingHorizontal: 20 }}>
                         <Avatar
+                            source={{ uri: `${baseURL}/${user && user['photo']}` }}
                             rounded
-                            title={<Text style={{ fontFamily: "mons-b", textTransform: "uppercase", color: Colors.primaryColor }}>{returnInitialOfNames({ fsname: user && user['fullname'], lsname: user && user['fullname'] })}</Text>}
+                            // title={<Text style={{ fontFamily: "mons-b", textTransform: "uppercase", color: Colors.primaryColor }}>{returnInitialOfNames({ fsname: user && user['fullname'], lsname: user && user['fullname'] })}</Text>}
                             size={60}
                             containerStyle={{ backgroundColor: Colors.pillColor, borderColor: Colors.primaryColor }}
                         />
