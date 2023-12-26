@@ -43,14 +43,14 @@ export const SigninScreen = ({ navigation, route }) => {
                             console.log('====================================');
                             console.log((user));
                             console.log('====================================');
-                            if(message.toString() === "Success"){
+                            if (message.toString() === "Success") {
                                 const u = user;
                                 const { username, userid, shops, photo, fullname, designationid } = user;
                                 onRunInsertQRY({
                                     table: "__tbl_users",
-                                    columns: `'fsname', 'lsname', 'nickname', 'age', 'gender', 'phone', 'crearedon', 'hospitalref'`,
-                                    dot: "?, ?, ?, ?, ?, ?, ?, ?",
-                                    values: [`${u['fsname']}`, `${u['lsname']}`, `${u['nickname']}`, `${u['age']}`, `${u['gender']}`, `${u['phone']}`, `${new Date().toLocaleString()}`, `${u['hospitalref']}`]
+                                    columns: `'username', 'fullname', 'userid', 'shops', 'photo', 'designationid', 'crearedon'`,
+                                    dot: "?, ?, ?, ?, ?, ?",
+                                    values: [`${username}`, `${fullname}`, `${userid}`, `${shops}`, `${photo}`, `${designationid}`, `${new Date().toLocaleString()}`]
                                 }, (err, insert) => {
                                     if (insert) navigation.replace("tabs");
                                     else {
@@ -64,7 +64,7 @@ export const SigninScreen = ({ navigation, route }) => {
                                         });
                                     }
                                 })
-                            }else{
+                            } else {
                                 setoutput("Le mot de passe ou le nom d'utilisateur est incorect")
                                 Toast.show({
                                     type: 'error',
