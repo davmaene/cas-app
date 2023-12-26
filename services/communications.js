@@ -11,7 +11,7 @@ axios.interceptors.request.use(
         // config.headers.accesskey = "$2b$10$AS6GbX37SkQS6skhMOYjveDOuUUgvGz9dvsrCbeylWl/SwMkDDp2G";
         // config.headers.apikeyaccess = "p@yondego.zaq2022";
         return config;
-    }, 
+    },
     rejected => {
         return new Promise.reject(rejected)
     }
@@ -24,7 +24,7 @@ axios.interceptors.response.use(
     , error => {
         const er = error.response ? error.response : undefined;
         return er ? er : new Promise.reject(error)
-});
+    });
 
 export const timeout = 25000;
 
@@ -32,10 +32,10 @@ export const onRunInsertQRY = async ({ columns, dot, table, values, options }, c
     try {
         db.transaction(
             (tx) => {
-              tx.executeSql(`insert into ${table} (${columns}) values (${dot})`, values);
-              tx.executeSql(`select * from ${table}`, [], (_, { rows }) => {
-                cb(undefined, rows['_array'][0])
-              });
+                tx.executeSql(`insert into ${table} (${columns}) values (${dot})`, values);
+                tx.executeSql(`select * from ${table}`, [], (_, { rows }) => {
+                    cb(undefined, rows['_array'][0])
+                });
             },
             (err) => {
                 cb(err, undefined)
@@ -51,12 +51,12 @@ export const onRunRawQRY = async ({ table, sql, options }, cb) => {
     try {
         db.transaction(
             (tx) => {
-              tx.executeSql(`${sql}`, null, 
-              (d => {
-                cb(undefined, d)
-              }), e => {
-                cb(e, undefined)
-              })
+                tx.executeSql(`${sql}`, null,
+                    (d => {
+                        cb(undefined, d)
+                    }), e => {
+                        cb(e, undefined)
+                    })
             });
     } catch (error) {
         return cb(error, undefined)
@@ -68,13 +68,13 @@ export const onRunRemoveQRY = async ({ table, clause }, cb) => {
         // DELETE FROM `__tbl_users` WHERE `__tbl_users`.`id` = 1 » ?
         db.transaction(
             (tx) => {
-              tx.executeSql(`delete from ${table} where id <> 0`, null, 
-            (line) => {
-                cb(undefined, 'done')
-            },
-            (err) => cb(err, undefined)
-            )
-        });
+                tx.executeSql(`delete from ${table} where id <> 0`, null,
+                    (line) => {
+                        cb(undefined, 'done')
+                    },
+                    (err) => cb(err, undefined)
+                )
+            });
     } catch (error) {
         return cb(error, undefined)
     }
@@ -87,11 +87,11 @@ export const onRunRetrieveQRY = async ({ table, limit }, cb) => {
             (tx) => {
                 tx.executeSql(`select * from ${table} limit ${limit}`, [], (_, { rows }) => {
                     cb(undefined, rows['_array'] && rows['_array']['length'] ? rows['_array'] : [])
-                },(err) => {
+                }, (err) => {
                     cb(err, undefined)
                 });
             }
-            ,(err) => {
+            , (err) => {
                 cb(err, undefined)
             }
         );
@@ -100,20 +100,44 @@ export const onRunRetrieveQRY = async ({ table, limit }, cb) => {
     }
 };
 
-export const onRunExternalRQST = async ({ url, data, method }, cb) => {
+export const onRunExternalRQST = async ({ url, data, method, type }, cb) => {
     try {
-        await axios({
-            timeout,
-            method: method ? method : "GET",
-            data: data ? data : null,
-            url: `${endpoint}/api${url}`
-        })
-        .then(res => {
-            return cb(undefined, res['data'])
-        })
-        .catch(err => {
-            return cb(err, undefined)
-        })
+        try {
+            await fetch(`${endpoint}${url}`, {
+                method,
+                headers: {
+                    'Content-type': 'application/x-www-form-urlencoded',
+                },
+                body: data ? data : null
+            }).then(reponse => reponse.json())
+                .then(data => {
+                    return cb(undefined, data)
+                })
+                .catch(err => {
+                    return cb(err, undefined)
+                })
+        } catch (error) {
+            setIsLoading(false);
+            handleError(error);
+        }
+        // await axios({
+        //     timeout,
+        //     method: method ? method : "GET",
+        //     data: data || null,
+        //     url: `${endpoint}${url}`,
+        //     // headers: {
+        //     //     'Content-type': 'application/x-www-form-urlencoded'
+        //     // }
+        //     // headers: {
+        //     //     ...type
+        //     // }
+        // })
+        //     .then(res => {
+        //         return cb(undefined, res['data'])
+        //     })
+        //     .catch(err => {
+        //         return cb(err, undefined)
+        //     })
     } catch (error) {
         return cb(error, undefined)
     }

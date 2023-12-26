@@ -44,13 +44,12 @@ export const OnInitialize = () => {
             tx.executeSql(
                 `CREATE TABLE IF NOT EXISTS __tbl_users (
                     id integer primary key not null,
-                    fsname varchar(100) NOT NULL,
-                    lsname varchar(60) NOT NULL,
-                    nickname varchar(60) NOT NULL,
-                    age varchar(60) NOT NULL,
-                    gender varchar(60) NOT NULL,
-                    phone varchar(60) NOT NULL,
-                    hospitalref integer NOT NULL,
+                    userid integer NOT NULL,
+                    username varchar(100) NOT NULL,
+                    fullname varchar(60) NOT NULL,
+                    photo varchar(60) NOT NULL,
+                    designationid varchar(60) NOT NULL,
+                    shops varchar(60) NOT NULL,
                     crearedon varchar(60) NOT NULL
                 )`
             )

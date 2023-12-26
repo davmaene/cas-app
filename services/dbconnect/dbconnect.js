@@ -11,7 +11,7 @@ const openDatabase = () => {
       };
     }
   
-    const db = SQLite.openDatabase("__db_sos_afia.db");
+    const db = SQLite.openDatabase("__db_cetracaapp.db");
     return db;
 };
 

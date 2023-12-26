@@ -23,85 +23,54 @@ export const SigninScreen = ({ navigation, route }) => {
 
     const onSubmit = async () => {
         setoutput("");
-        if (num.length > 0 && num.length < 10) {
+        if (num.length > 0) {
             if (password.length > 0) {
                 setisloading(true)
                 try {
                     await onRunExternalRQST({
+                        type: 1,
                         method: "POST",
-                        url: "?op=login&",
-                        data: {
-                            username: num,
-                            password
-                        }
+                        url: "/app?op=login&",
+                        data: 'username=' + num + '&password=' + password,
                     }, (err, done) => {
+                        // console.log(done, err);
                         if (done) {
-                            setisloading(false)
-                            switch (done['status']) {
-                                case 200:
-                                    const u = done && done['data'];
-                                    onRunInsertQRY({
-                                        table: "__tbl_users",
-                                        columns: `'fsname', 'lsname', 'nickname', 'age', 'gender', 'phone', 'crearedon', 'hospitalref'`,
-                                        dot: "?, ?, ?, ?, ?, ?, ?, ?",
-                                        values: [`${u['fsname']}`, `${u['lsname']}`, `${u['nickname']}`, `${u['age']}`, `${u['gender']}`, `${u['phone']}`, `${new Date().toLocaleString()}`, `${u['hospitalref']}`]
-                                    }, (err, insert) => {
-                                        if (insert) navigation.replace("tabs");
-                                        else {
-                                            setisloading(false);
-                                            setcanverify(true);
-                                            setValue("")
-                                            Toast.show({
-                                                type: 'error',
-                                                text1: 'Erreur',
-                                                text2: 'Une erreur est survenue lors de l\'activation du compte !',
-                                            });
-                                        }
-                                    })
-                                    break;
-                                case 203:
-                                    setoutput("Le mot de passe ou le nom d'utilisateur est incorect")
-                                    Toast.show({
-                                        type: 'error',
-                                        text1: 'Erreur',
-                                        text2: 'Le mot de passe ou le nom d\'utilisateur incorect',
-                                    });
-                                    break;
-                                case 402:
-                                    setoutput("Votre compte n'est pas encore activé")
-                                    ref.current.confirm({
-                                        title: <Text style={{ fontFamily: "mons", fontSize: Dims.titletextsize }}>Vérification compte</Text>,
-                                        content: [<Text style={{ fontFamily: "mons-e", fontSize: Dims.subtitletextsize, marginHorizontal: 25 }} >Votre compte n'est pas encore activé, voulez-vous activer le compte</Text>],
-                                        ok: {
-                                            text: 'Vérifier le compte',
-                                            style: {
-                                                color: Colors.primaryColor,
-                                                fontFamily: 'mons'
-                                            },
-                                            callback: () => navigation.replace("verifyaccount", { item: done['data'] })
-                                        },
-                                        cancel: {
-                                            text: 'Annuler',
-                                            style: {
-                                                color: Colors.darkColor,
-                                                fontFamily: "mons-e"
-                                            }
-                                        },
-                                    })
-                                    Toast.show({
-                                        type: 'error',
-                                        text1: 'Erreur',
-                                        text2: 'Votre compte n\'est pas encore activé',
-                                    });
-                                    break;
-                                default:
-                                    setoutput("Une erreur inconue vient de se produire !")
-                                    Toast.show({
-                                        type: 'error',
-                                        text1: 'Erreur',
-                                        text2: 'Une erreur inconue vient de se produire !',
-                                    });
-                                    break;
+                            let { message, user } = done;
+                            user = user[0]
+                            delete user['4']
+                            delete user['roles']
+                            setisloading(false);
+                            console.log('====================================');
+                            console.log((user));
+                            console.log('====================================');
+                            if(message.toString() === "Success"){
+                                const u = user;
+                                const { username, userid, shops, photo, fullname, designationid } = user;
+                                onRunInsertQRY({
+                                    table: "__tbl_users",
+                                    columns: `'fsname', 'lsname', 'nickname', 'age', 'gender', 'phone', 'crearedon', 'hospitalref'`,
+                                    dot: "?, ?, ?, ?, ?, ?, ?, ?",
+                                    values: [`${u['fsname']}`, `${u['lsname']}`, `${u['nickname']}`, `${u['age']}`, `${u['gender']}`, `${u['phone']}`, `${new Date().toLocaleString()}`, `${u['hospitalref']}`]
+                                }, (err, insert) => {
+                                    if (insert) navigation.replace("tabs");
+                                    else {
+                                        setisloading(false);
+                                        setcanverify(true);
+                                        setValue("")
+                                        Toast.show({
+                                            type: 'error',
+                                            text1: 'Erreur',
+                                            text2: 'Une erreur est survenue lors de l\'activation du compte !',
+                                        });
+                                    }
+                                })
+                            }else{
+                                setoutput("Le mot de passe ou le nom d'utilisateur est incorect")
+                                Toast.show({
+                                    type: 'error',
+                                    text1: 'Erreur',
+                                    text2: 'Le mot de passe ou le nom d\'utilisateur incorect',
+                                });
                             }
                         } else {
                             setisloading(false)
@@ -150,7 +119,7 @@ export const SigninScreen = ({ navigation, route }) => {
                                         {/* <View style={{ height: "100%", justifyContent: "center", backgroundColor: Colors.pillColor }}>
                                             <Text style={{ paddingLeft: 25, fontFamily: "mons", color: Colors.primaryColor }}>+243</Text>
                                         </View> */}
-                                        <TextInput placeholder='Utilisateur' keyboardType={"number-pad"} onChangeText={(t) => setnum(t)} style={[inputGroup.input, { fontFamily: "mons", width: "100%" }]} />
+                                        <TextInput placeholder='Utilisateur' keyboardType={"ascii-capable"} onChangeText={(t) => setnum(t)} style={[inputGroup.input, { fontFamily: "mons", width: "100%" }]} />
                                     </View>
                                     <View style={[inputGroup.iconcontainer, { backgroundColor: Colors.primaryColor }]}>
                                         <Entypo name="user" size={Dims.iconsize} color={Colors.whiteColor} />
