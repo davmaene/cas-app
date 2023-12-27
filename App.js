@@ -26,7 +26,6 @@ export default function App() {
             headerShown: false
           }}
         >
-
           <Stack.Screen name="loading" component={LoadingSceen} />
           <Stack.Screen name="tabs" component={TabBottom} />
           <Stack.Screen name="signin" component={SigninScreen} />
@@ -34,7 +33,6 @@ export default function App() {
           <Stack.Screen name="settings" component={SettingScreen} />
           <Stack.Screen name="verifyaccount" component={VerifyaccountScreen} />
           <Stack.Screen name="profile" component={ProfileScreen} />
-
           <Stack.Screen name="detailflighht" component={DetailflightScreen} />
 
         </Stack.Navigator>

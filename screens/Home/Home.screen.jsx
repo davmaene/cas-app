@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StatusBar, View, Text, Animated, TouchableHighlight, Modal, TextInput, ScrollView } from 'react-native';
 import { Colors } from '../../assets/colors/Colors';
 import { Dims } from '../../assets/dimensions/Dimemensions';
-import { btn, inputGroup, shadowBox } from '../../assets/styles/Styles';
+import { SpinerStyle, btn, inputGroup, shadowBox } from '../../assets/styles/Styles';
 import { AntDesign, Entypo, Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
 import { Header } from '../../components/Header/comp.header';
 import { Divider, Image } from 'react-native-elements';
@@ -11,11 +11,12 @@ import { RefreshControl } from 'react-native';
 import { FlatList } from 'react-native';
 import { handleSearch } from 'dm-handlesearch';
 import { appname, longappname } from '../../assets/configs/configs';
-import { onDeconnextion } from '../../services/communications';
+import { onDeconnextion, onRunExternalRQST, onRunInsertQRY } from '../../services/communications';
 import RNRestart from 'react-native-restart';
 import Toast from 'react-native-toast-message';
 import DialogBox from 'react-native-dialogbox';
-
+import Spinner from 'react-native-loading-spinner-overlay';
+import { Loader } from '../../components/Loader/comp.loader';
 
 export const HomeScreen = ({ navigation }) => {
 
@@ -24,6 +25,7 @@ export const HomeScreen = ({ navigation }) => {
     const [isloading, setisloading] = React.useState(false);
     const [flghts, setflights] = React.useState(shuffleArray({ array: flights }));
     const [temp, settemp] = React.useState([]);
+    const [services, setservices] = React.useState([])
 
     const renderItem = ({ item }) => {
         const { dep } = item;
@@ -133,8 +135,41 @@ export const HomeScreen = ({ navigation }) => {
         });
     };
 
+    const onLoadServices = async () => {
+        setisloading(true)
+        onRunExternalRQST({
+            url: `?op=services`,
+            method: "GET",
+            type: 1,
+            data: null
+        }, (err, done) => {
+            setisloading(false)
+            if (done) {
+                if (Array.isArray(done) && done.length > 0) {
+                    setservices([...done])
+                } else {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Chargement',
+                        text2: 'Erreur de chargement des services',
+                    });
+                }
+            } else {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Chargement',
+                    text2: 'Erreur de chargement des services',
+                });
+            }
+        })
+    }
+
+    const __loadInfos = async () => {
+        onLoadServices()
+    }
+
     React.useEffect(() => {
-        onLoadFligts()
+        __loadInfos()
     }, [])
 
     return (
@@ -188,7 +223,70 @@ export const HomeScreen = ({ navigation }) => {
                         </View>
                     </View>
                     <View style={[shadowBox, { height: 140, backgroundColor: Colors.primaryColor, width: "95%", alignSelf: "center" },]}>
+                        <View>
 
+                        </View>
+                        <View>
+
+                        </View>
+                        <View style={{ position: "absolute", zIndex: 100, padding: 5, bottom: -20, width: "100%", flexDirection: "row", alignContent: "center", alignItems: "center", justifyContent: "center" }} >
+                            <TouchableHighlight
+                                style={{
+                                    padding: 8,
+                                    height: 40,
+                                    width: 40,
+                                    borderRadius: 5,
+                                    alignContent: "center",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: Colors.pillColor
+                                }}
+                                underlayColor={Colors.pillColor}
+                                onPress={(e) => {
+                                    alert("Entrees")
+                                }}
+                            >
+                                <AntDesign name="arrowdown" size={Dims.iconsize} color={Colors.primaryColor} />
+                            </TouchableHighlight>
+                            <View style={{ padding: 12 }} />
+                            <TouchableHighlight
+                                style={{
+                                    padding: 8,
+                                    height: 40,
+                                    width: 40,
+                                    borderRadius: 5,
+                                    alignContent: "center",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: Colors.pillColor
+                                }}
+                                underlayColor={Colors.pillColor}
+                                onPress={(e) => {
+                                    alert("Dettes")
+                                }}
+                            >
+                                <MaterialIcons name="request-page" size={24} color={Colors.dangerColor} />
+                            </TouchableHighlight>
+                            <View style={{ padding: 12 }} />
+                            <TouchableHighlight
+                                style={{
+                                    padding: 8,
+                                    height: 40,
+                                    width: 40,
+                                    borderRadius: 5,
+                                    alignContent: "center",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: Colors.pillColor
+                                }}
+                                underlayColor={Colors.pillColor}
+                                onPress={(e) => {
+                                    alert("Sorties")
+                                }}
+                            >
+                                <AntDesign name="arrowup" size={Dims.iconsize} color={Colors.primaryColor} />
+                            </TouchableHighlight>
+                        </View>
                     </View>
                 </View>
                 <View
@@ -215,6 +313,21 @@ export const HomeScreen = ({ navigation }) => {
                 </View>
             </View>
             <DialogBox ref={ref} isOverlayClickClose={true} />
+            <Spinner
+                visible={isloading}
+                textContent={
+                    <View style={{ width: 300, alignSelf: "center" }} >
+                        <Text style={{ fontFamily: "mons-b", fontSize: Dims.titletextsize, color: Colors.primaryColor, textAlign: "center" }}>Chargement ecnours...</Text>
+                        <Text style={{ textAlign: "center", fontFamily: "mons-e", marginTop: 10, width: 180, alignSelf: "center", color: Colors.whiteColor }}>La synchronisation est encours veillez patienter le temps que nous le chargeent termine</Text>
+                    </View>
+                }
+                animation='fade'
+                color={Colors.primaryColor}
+                size={"large"}
+                overlayColor={`rgba(0, 0, 0, .8)`}
+                customIndicator={<Loader size={50} color={Colors.primaryColor} />}
+                textStyle={[SpinerStyle, { color: Colors.primaryColor }]}
+            />
         </>
     )
 }

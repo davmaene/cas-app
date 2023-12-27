@@ -63,6 +63,28 @@ export const shadowBox = StyleSheet.create({
     shadowRadius: 2,
 })
 
+export const SpinerStyle = StyleSheet.create({
+    spinnerTextStyle: {
+        color: '#FFF'
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.primaryColor
+    },
+    welcome: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10
+    },
+    instructions: {
+        textAlign: 'center',
+        color: '#333333',
+        marginBottom: 5
+    }
+});
+
 export const btn = StyleSheet.create({ width: "100%", backgroundColor: Colors.primaryColor, height: 46, borderRadius: Dims.borderradius, justifyContent: "center", alignContent: "center", alignItems: "center" })
 
 export const cel = StyleSheet.create({

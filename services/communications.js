@@ -129,7 +129,6 @@ export const onDeconnextion = async (cb) => {
 };
 
 export const onRunExternalRQST = async ({ url, data, method, type }, cb) => {
-    console.log(data, method);
     try {
         await fetch(`${endpoint}${url}`, {
             method,

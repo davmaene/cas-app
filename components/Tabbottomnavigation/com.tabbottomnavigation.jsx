@@ -170,7 +170,7 @@ export const TabBottom = () => {
     >
       <Tab.Screen name="home" component={HomeScreen} options={{ tabBarLabel: "" }} />
       <Tab.Screen name="inners" component={InnersScren} options={{ tabBarLabel: "Entrées" }} />
-      <Tab.Screen name="outers" component={OutersScreen} options={{ tabBarLabel: "Sortie" }} />
+      <Tab.Screen name="outers" component={OutersScreen} options={{ tabBarLabel: "Sorties" }} />
       <Tab.Screen name="about" component={AboutScreen} options={{ tabBarLabel: "A propos" }} />
     </Tab.Navigator>
   );
