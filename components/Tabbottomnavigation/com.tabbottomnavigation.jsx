@@ -70,7 +70,7 @@ export const TabBottom = () => {
           size = 20;
           let iconName;
           switch (route.name) {
-            case 'home'://<Ionicons name={iconName} size={size} color={color} />;
+            case 'home':
               iconName = focused
                 ? 'apps'
                 : 'apps-outline';
@@ -148,7 +148,6 @@ export const TabBottom = () => {
               return <Ionicons name={iconName} size={size} color={color} />;
               break;
           }
-          // return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarVisibilityAnimationConfig: {
           show: true
