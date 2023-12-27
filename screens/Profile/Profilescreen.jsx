@@ -545,7 +545,7 @@ export const ProfileScreen = ({ navigation }) => {
                 {/* <Footer /> */}
             </ScrollView>
             {/* < */}
-            <DialogBox ref={ref} isOverlayClickClose={true} />
+            <DialogBox ref={ref} isOverlayClickClose={false} />
             <Spinner
                 visible={isloading}
                 textContent={

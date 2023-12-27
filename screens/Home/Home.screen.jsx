@@ -11,6 +11,11 @@ import { RefreshControl } from 'react-native';
 import { FlatList } from 'react-native';
 import { handleSearch } from 'dm-handlesearch';
 import { appname, longappname } from '../../assets/configs/configs';
+import { onDeconnextion } from '../../services/communications';
+import RNRestart from 'react-native-restart';
+import Toast from 'react-native-toast-message';
+import DialogBox from 'react-native-dialogbox';
+
 
 export const HomeScreen = ({ navigation }) => {
 
@@ -89,6 +94,45 @@ export const HomeScreen = ({ navigation }) => {
         })
     }
 
+    const handlDeconnexion = () => {
+        ref.current.confirm({
+            title: <Text style={{ fontFamily: "mons", fontSize: Dims.titletextsize }}>Déconnexion compte</Text>,
+            content: [<Text style={{ fontFamily: "mons-e", fontSize: Dims.subtitletextsize, marginHorizontal: 25 }} >Vous êtes sur le point de vouloir vous déconnecter de se téléphone voulez-vous vraiement continuer </Text>],
+            ok: {
+                text: 'Continuer',
+                style: {
+                    color: Colors.primaryColor,
+                    fontFamily: 'mons'
+                },
+                callback: () => {
+                    onDeconnextion((err, done) => {
+                        if (done) {
+                            Toast.show({
+                                type: 'success',
+                                text1: 'Déconnexion',
+                                text2: 'Vos informations sont supprimées avec succès !',
+                            });
+                            RNRestart.Restart()
+                        } else {
+                            Toast.show({
+                                type: 'error',
+                                text1: 'Déconnexion',
+                                text2: 'Une erreur vient de se produire lors de la déconnexion !',
+                            });
+                        }
+                    })
+                }
+            },
+            cancel: {
+                text: 'Annuler',
+                style: {
+                    color: Colors.darkColor,
+                    fontFamily: "mons-e"
+                }
+            },
+        });
+    };
+
     React.useEffect(() => {
         onLoadFligts()
     }, [])
@@ -100,11 +144,47 @@ export const HomeScreen = ({ navigation }) => {
                 <View style={{ width: "100%", height: 200 }}>
                     <View style={{ height: 80, padding: 10, width: "100%", flexDirection: "row", alignContent: "center", alignItems: "center", justifyContent: "center" }}>
                         <View style={{ width: "60%" }}>
-                            <Text style={{ fontFamily: "mons-b", fontSize: 25 }}>{appname}</Text>
-                            <Text style={{ fontFamily: "mons" }}>{longappname} application surveillance de entrées et sorties</Text>
+                            <Text style={{ fontFamily: "mons-b", fontSize: 25, color: Colors.darkColor }}>{appname} | Caisse</Text>
+                            <Text style={{ fontFamily: "mons", color: Colors.darkColor }}>{longappname} application surveillance de entrées et sorties</Text>
                         </View>
-                        <View style={{ width: "40%" }}>
-
+                        <View style={{ width: "40%", flexDirection: "row", alignContent: "flex-end", alignItems: "flex-end", justifyContent: "flex-end" }}>
+                            <TouchableHighlight
+                                style={{
+                                    padding: 8,
+                                    height: 40,
+                                    width: 40,
+                                    borderRadius: 5,
+                                    alignContent: "center",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: Colors.primaryColor
+                                }}
+                                underlayColor={Colors.primaryColor}
+                                onPress={(e) => {
+                                    navigation.navigate('profile')
+                                }}
+                            >
+                                <AntDesign name="user" size={Dims.iconsize} color={Colors.whiteColor} />
+                            </TouchableHighlight>
+                            <View style={{ padding: 5 }} />
+                            <TouchableHighlight
+                                style={{
+                                    padding: 8,
+                                    height: 40,
+                                    width: 40,
+                                    borderRadius: 5,
+                                    alignContent: "center",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: Colors.primaryColor
+                                }}
+                                underlayColor={Colors.primaryColor}
+                                onPress={(e) => {
+                                    handlDeconnexion()
+                                }}
+                            >
+                                <AntDesign name="login" size={Dims.iconsize} color={Colors.whiteColor} />
+                            </TouchableHighlight>
                         </View>
                     </View>
                     <View style={[shadowBox, { height: 140, backgroundColor: Colors.primaryColor, width: "95%", alignSelf: "center" },]}>
@@ -134,6 +214,7 @@ export const HomeScreen = ({ navigation }) => {
                     </>
                 </View>
             </View>
+            <DialogBox ref={ref} isOverlayClickClose={true} />
         </>
     )
 }
