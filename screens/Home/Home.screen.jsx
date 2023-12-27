@@ -1,14 +1,12 @@
 import * as React from 'react';
-import { StatusBar, View, Text, Animated, TouchableHighlight, Modal, TextInput, ScrollView } from 'react-native';
+import { StatusBar, View, Text, Animated, TouchableHighlight, Modal, TextInput, ScrollView, RefreshControl, FlatList } from 'react-native';
 import { Colors } from '../../assets/colors/Colors';
 import { Dims } from '../../assets/dimensions/Dimemensions';
 import { SpinerStyle, btn, inputGroup, shadowBox } from '../../assets/styles/Styles';
-import { AntDesign, Entypo, Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, Entypo, Ionicons, Feather, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { Header } from '../../components/Header/comp.header';
-import { Divider, Image } from 'react-native-elements';
+import { Divider, Image, Tab, TabView } from 'react-native-elements';
 import { flights, now, shuffleArray } from '../../helpers/helpers.all';
-import { RefreshControl } from 'react-native';
-import { FlatList } from 'react-native';
 import { handleSearch } from 'dm-handlesearch';
 import { appname, longappname } from '../../assets/configs/configs';
 import { onDeconnextion, onRunExternalRQST, onRunInsertQRY } from '../../services/communications';
@@ -26,10 +24,21 @@ export const HomeScreen = ({ navigation }) => {
     const [flghts, setflights] = React.useState(shuffleArray({ array: flights }));
     const [temp, settemp] = React.useState([]);
     const [services, setservices] = React.useState([])
+    const [stores, setstores] = React.useState([])
+    const [pos, setpos] = React.useState(0)
 
-    const renderItem = ({ item }) => {
-        const { dep } = item;
-        const { arr } = item;
+    const RenderItem = ({ item }) => {
+        const {
+            createdby,
+            createdon,
+            datastatus,
+            deletedby,
+            icon,
+            modifiedby,
+            service_id,
+            storeid21,
+            storename,
+        } = item
         return (
             <>
                 <TouchableHighlight
@@ -47,10 +56,10 @@ export const HomeScreen = ({ navigation }) => {
                                         <Text style={{ fontFamily: "mons-e", textAlign: "center", fontSize: Dims.subtitletextsize }}>{item && item['from']}</Text>
                                     </View>
                                     <View>
-                                        <Text style={{ fontFamily: "mons-b", textAlign: "center" }}>{dep && dep['time']}</Text>
+                                        {/* <Text style={{ fontFamily: "mons-b", textAlign: "center" }}>{dep && dep['time']}</Text> */}
                                     </View>
                                     <View>
-                                        <Text style={{ fontFamily: "mons-e", textAlign: "center", fontSize: Dims.subtitletextsize }}>{dep && dep['date']}</Text>
+                                        {/* <Text style={{ fontFamily: "mons-e", textAlign: "center", fontSize: Dims.subtitletextsize }}>{dep && dep['date']}</Text> */}
                                     </View>
                                 </View>
                                 <View>
@@ -61,10 +70,10 @@ export const HomeScreen = ({ navigation }) => {
                                         <Text style={{ fontFamily: "mons-e", textAlign: "center", fontSize: Dims.subtitletextsize }}>{item && item['to']}</Text>
                                     </View>
                                     <View>
-                                        <Text style={{ fontFamily: "mons-b", textAlign: "center" }}>{arr && arr['time']}</Text>
+                                        {/* <Text style={{ fontFamily: "mons-b", textAlign: "center" }}>{arr && arr['time']}</Text> */}
                                     </View>
                                     <View>
-                                        <Text style={{ fontFamily: "mons-e", textAlign: "center", fontSize: Dims.subtitletextsize }}>{arr && arr['date']}</Text>
+                                        {/* <Text style={{ fontFamily: "mons-e", textAlign: "center", fontSize: Dims.subtitletextsize }}>{arr && arr['date']}</Text> */}
                                     </View>
                                 </View>
                             </View>
@@ -148,6 +157,7 @@ export const HomeScreen = ({ navigation }) => {
                 if (Array.isArray(done) && done.length > 0) {
                     setservices([...done])
                 } else {
+                    setservices([])
                     Toast.show({
                         type: 'error',
                         text1: 'Chargement',
@@ -155,6 +165,38 @@ export const HomeScreen = ({ navigation }) => {
                     });
                 }
             } else {
+                setservices([])
+                Toast.show({
+                    type: 'error',
+                    text1: 'Chargement',
+                    text2: 'Erreur de chargement des services',
+                });
+            }
+        })
+    };
+
+    const onLoadStores = async () => {
+        setisloading(true)
+        onRunExternalRQST({
+            url: `?op=stores`,
+            method: "GET",
+            type: 1,
+            data: null
+        }, (err, done) => {
+            setisloading(false)
+            if (done) {
+                if (Array.isArray(done) && done.length > 0) {
+                    setstores([...done])
+                } else {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Chargement',
+                        text2: 'Erreur de chargement des services',
+                    });
+                    setstores([])
+                }
+            } else {
+                setstores([])
                 Toast.show({
                     type: 'error',
                     text1: 'Chargement',
@@ -166,6 +208,7 @@ export const HomeScreen = ({ navigation }) => {
 
     const __loadInfos = async () => {
         onLoadServices()
+        onLoadStores()
     }
 
     React.useEffect(() => {
@@ -223,13 +266,55 @@ export const HomeScreen = ({ navigation }) => {
                         </View>
                     </View>
                     <View style={[shadowBox, { height: 140, backgroundColor: Colors.primaryColor, width: "95%", alignSelf: "center" },]}>
-                        <View>
-
+                        <View style={{ width: "100%", height: "auto", padding: 15 }} >
+                            <View style={{ flexDirection: "row", alignContent: "center", alignItems: "center" }} >
+                                <FontAwesome name="calendar" size={24} color={Colors.whiteColor} />
+                                <View style={{ flexDirection: "column" }} >
+                                    <Text style={{ fontFamily: "mons", fontSize: 11, paddingLeft: 10, color: Colors.whiteColor }} >{"Aujourd'hui"}</Text>
+                                    <Text style={{ fontFamily: "mons-b", fontSize: 14, paddingLeft: 10, color: Colors.whiteColor }} >{now()}</Text>
+                                </View>
+                            </View>
                         </View>
-                        <View>
+                        <Divider style={{ width: "92%", alignSelf: "center" }} />
+                        <View style={{ width: "100%", height: 80, padding: 10 }}>
+                            <View style={{ flexDirection: "row", alignContent: "center", alignItems: "center", alignSelf: "center" }}>
+                                <View style={{ width: "30%", height: 70 }} >
+                                    <View style={{ flexDirection: "row", alignContent: "center", alignItems: "center", alignSelf: "center" }} >
+                                        <Text style={{ textAlign: "center", fontFamily: "mons", color: Colors.whiteColor }} >Entrees</Text>
+                                        <MaterialIcons name="arrow-drop-down" size={24} color={Colors.warningColor} />
+                                    </View>
+                                    <View style={{ alignSelf: "center" }} >
+                                        <Text style={{ fontFamily: "mons-b", fontSize: 20, color: Colors.whiteColor }} >91919.45<Text style={{ fontFamily: "mons", fontSize: 13 }}>{" "}$</Text></Text>
+                                    </View>
+                                </View>
+                                {/* <View style={{ paddingHorizontal: 5, borderRightColor: Colors.whiteColor, borderRightWidth: .4, height: 70 }} /> */}
+                                <View
+                                    style={{
+                                        width: "40%",
+                                        height: 70,
+                                        paddingHorizontal: 5,
+                                        borderRightColor: Colors.whiteColor,
+                                        borderLeftColor: Colors.whiteColor,
+                                        borderRightWidth: .4,
+                                        borderLeftWidth: .4,
+                                        height: 70
+                                    }}
+                                >
 
+                                </View>
+                                {/* <View style={{ paddingHorizontal: 5, borderRightColor: Colors.whiteColor, borderRightWidth: .4, height: 70 }} /> */}
+                                <View style={{ width: "30%", height: 70 }} >
+                                    <View style={{ flexDirection: "row", alignContent: "center", alignItems: "center", alignSelf: "center" }} >
+                                        <Text style={{ textAlign: "center", fontFamily: "mons", color: Colors.whiteColor }} >Sorties</Text>
+                                        <MaterialIcons name="arrow-drop-up" size={24} color={Colors.dangerColor} />
+                                    </View>
+                                    <View style={{ alignSelf: "center" }} >
+                                        <Text style={{ fontFamily: "mons-b", fontSize: 20, color: Colors.whiteColor }} >786.45<Text style={{ fontFamily: "mons", fontSize: 13 }}>{" "}$</Text></Text>
+                                    </View>
+                                </View>
+                            </View>
                         </View>
-                        <View style={{ position: "absolute", zIndex: 100, padding: 5, bottom: -20, width: "100%", flexDirection: "row", alignContent: "center", alignItems: "center", justifyContent: "center" }} >
+                        <View style={{ display: "none", position: "absolute", zIndex: 100, padding: 5, bottom: -20, width: "100%", flexDirection: "row", alignContent: "center", alignItems: "center", justifyContent: "center" }} >
                             <TouchableHighlight
                                 style={[shadowBox, {
                                     padding: 8,
@@ -289,28 +374,54 @@ export const HomeScreen = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
-                {/* <View
-                    style={{ paddingHorizontal: 20, marginTop: 20 }}
-                >
+                <View style={{ paddingHorizontal: 20, marginTop: 50 }}>
                     <>
                         <Divider />
-                        <>
-                            <View style={{ paddingVertical: 5, marginTop: 20 }}>
-                                <Text style={{ fontFamily: "mons-b", fontSize: Dims.titletextsize }}>Vols disponibles</Text>
-                                <Text style={{ fontFamily: "mons-e" }}>Vols disponible pour | <Text>{now()}</Text></Text>
+                        <ScrollView
+                            contentContainerStyle={{ paddingBottom: "100%" }}
+                            style={{ backgroundColor: Colors.whiteColor, width: Dims.width, alignSelf: "center" }}
+                        >
+                            <View style={{ paddingVertical: 5, marginTop: 20, marginBottom: 20, paddingHorizontal: 10 }}>
+                                <Text style={{ fontFamily: "mons-b", fontSize: Dims.titletextsize }}>Services</Text>
+                                <Text style={{ fontFamily: "mons-e" }}>situation de la caisse par service | <Text style={{ fontFamily: "mons-b", color: Colors.primaryColor }}>{now()}</Text></Text>
                             </View>
-                            <View style={{}}>
-                                <FlatList
-                                    showsVerticalScrollIndicator={false}
-                                    contentContainerStyle={{ paddingBottom: "200%" }}
-                                    refreshControl={<RefreshControl colors={[Colors.primaryColor]} refreshing={isloading} onRefresh={onLoadFligts} />}
-                                    data={flghts}
-                                    renderItem={renderItem}
-                                />
+                            <View style={{ paddingHorizontal: 10 }} >
+                                {services.length > 0 && (
+                                    <Tab
+                                        value={pos}
+                                        onChange={setpos}
+                                        indicatorStyle={{ backgroundColor: Colors.primaryColor, height: 2 }}
+                                        // disableIndicator
+                                        variant='default'
+                                    >
+                                        {services.map((ser, indx) => {
+                                            const { service_name, service_id, entryextrafiled } = ser;
+                                            return (<Tab.Item
+                                                style={{ borderColor: Colors.primaryColor }}
+                                                title={<Text style={{ padding: 10, color: Colors.primaryColor, fontFamily: "mons" }} >{service_name}</Text>}
+                                                key={`${Math.random() * (parseInt(service_id))}`}
+                                                onPress={() => { alert(1) }}
+                                            />)
+                                        })}
+                                    </Tab>
+                                )}
                             </View>
-                        </>
+                            <TabView
+                                value={pos}
+                                onChange={setpos}
+                            >
+                                <TabView.Item style={{ backgroundColor: Colors.whiteColor, width: Dims.width, height: 600, paddingHorizontal: 10 }}>
+                                    {stores.map((s, index) => {
+                                        return <RenderItem item={s} key={index * Math.random()} />
+                                    })}
+                                </TabView.Item>
+                                <TabView.Item style={{ backgroundColor: Colors.whiteColor, width: Dims.width, height: 600, paddingHorizontal: 10 }}>
+                                    <Text h1>Favorite</Text>
+                                </TabView.Item>
+                            </TabView>
+                        </ScrollView>
                     </>
-                </View> */}
+                </View>
             </View>
             <DialogBox ref={ref} isOverlayClickClose={true} />
             <Spinner
