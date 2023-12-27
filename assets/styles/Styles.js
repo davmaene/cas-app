@@ -49,6 +49,20 @@ export const inputGroup = StyleSheet.create({
     }
 });
 
+export const shadowBox = StyleSheet.create({
+    width: 80,
+    height: 80,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    // Elevation for Android
+    elevation: 5,
+    // Shadow for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+})
+
 export const btn = StyleSheet.create({ width: "100%", backgroundColor: Colors.primaryColor, height: 46, borderRadius: Dims.borderradius, justifyContent: "center", alignContent: "center", alignItems: "center" })
 
 export const cel = StyleSheet.create({

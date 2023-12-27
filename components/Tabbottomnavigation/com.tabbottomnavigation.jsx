@@ -11,6 +11,9 @@ import { View, Image } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { ProfileScreen } from '../../screens/Profile/Profilescreen';
+import { InnersScren } from '../../screens/Inners/InnersScreen';
+import { OutersScreen } from '../../screens/Outers/OutersScreen';
+import { shadowBox } from '../../assets/styles/Styles';
 
 const Tab = createBottomTabNavigator();
 
@@ -76,26 +79,26 @@ export const TabBottom = () => {
                   {focused
                     ?
                     (
-                      <View style={{
+                      <View style={[{
                         backgroundColor: Colors.whiteColor,
                         borderWidth: .1,
                         borderColor: Colors.primaryColor,
                         padding: 8,
                         justifyContent: "center",
-                        width: 80,
                         alignContent: "center",
                         alignItems: "center",
                         borderTopEndRadius: 60,
+                        width: 80,
                         height: 80,
                         borderTopStartRadius: 60,
-                        elevation: 2
-                      }}>
+                        elevation: 2,
+                      }, shadowBox]}>
                         <Image source={require("../../assets/keyicon.png")} style={{ marginTop: 10, width: 55, resizeMode: "center" }} />
                       </View>
                     )
                     :
                     (
-                      <View style={{
+                      <View style={[{
                         backgroundColor: Colors.whiteColor,
                         padding: 8,
                         justifyContent: "center",
@@ -106,7 +109,7 @@ export const TabBottom = () => {
                         height: 80,
                         borderTopStartRadius: 60,
                         elevation: 2
-                      }}>
+                      }, shadowBox]}>
                         <Image source={require("../../assets/keyicondark.png")} style={{ marginTop: 10, width: 55, resizeMode: "center" }} />
                       </View>
                     )
@@ -120,10 +123,16 @@ export const TabBottom = () => {
                 : "user";
               return <Feather name={iconName} size={size} color={color} />
               break;
-            case 'bookings':
+            case 'inners':
               iconName = focused
-                ? 'bookmark'
-                : 'bookmark';
+                ? 'arrow-down'
+                : 'arrow-down';
+              return <FontAwesome name={iconName} size={size} color={color} />;
+              break;
+            case 'outers':
+              iconName = focused
+                ? 'arrow-up'
+                : 'arrow-up';
               return <FontAwesome name={iconName} size={size} color={color} />;
               break;
             case 'about':
@@ -161,8 +170,8 @@ export const TabBottom = () => {
       })}
     >
       <Tab.Screen name="home" component={HomeScreen} options={{ tabBarLabel: "" }} />
-      <Tab.Screen name="profile" component={ProfileScreen} options={{ tabBarLabel: "Moi" }} />
-      <Tab.Screen name="bookings" component={FeedScreen} options={{ tabBarLabel: "Mes reservations" }} />
+      <Tab.Screen name="inners" component={InnersScren} options={{ tabBarLabel: "Entrées" }} />
+      <Tab.Screen name="outers" component={OutersScreen} options={{ tabBarLabel: "Sortie" }} />
       <Tab.Screen name="about" component={AboutScreen} options={{ tabBarLabel: "A propos" }} />
     </Tab.Navigator>
   );

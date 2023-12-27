@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StatusBar, View, Text, Animated, TouchableHighlight, Modal, TextInput, ScrollView } from 'react-native';
 import { Colors } from '../../assets/colors/Colors';
 import { Dims } from '../../assets/dimensions/Dimemensions';
-import { btn, inputGroup, shadowBox } from '../../assets/styles/Styles';
+import { btn, inputGroup } from '../../assets/styles/Styles';
 import { AntDesign, Entypo, Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
 import { Header } from '../../components/Header/comp.header';
 import { Divider, Image } from 'react-native-elements';
@@ -10,7 +10,6 @@ import { flights, now, shuffleArray } from '../../helpers/helpers.all';
 import { RefreshControl } from 'react-native';
 import { FlatList } from 'react-native';
 import { handleSearch } from 'dm-handlesearch';
-import { appname, longappname } from '../../assets/configs/configs';
 
 export const HomeScreen = ({ navigation }) => {
 
@@ -19,6 +18,7 @@ export const HomeScreen = ({ navigation }) => {
     const [isloading, setisloading] = React.useState(false);
     const [flghts, setflights] = React.useState(shuffleArray({ array: flights }));
     const [temp, settemp] = React.useState([]);
+    // const [keyword, setkeyword] = React.useState("")
 
     const renderItem = ({ item }) => {
         const { dep } = item;
@@ -97,24 +97,52 @@ export const HomeScreen = ({ navigation }) => {
         <>
             <StatusBar barStyle={"dark-content"} backgroundColor={Colors.whiteColor} />
             <View style={{ backgroundColor: Colors.whiteColor, flex: 1 }}>
-                <View style={{ width: "100%", height: 200 }}>
-                    <View style={{ height: 80, padding: 10, width: "100%", flexDirection: "row", alignContent: "center", alignItems: "center", justifyContent: "center" }}>
-                        <View style={{ width: "60%" }}>
-                            <Text style={{ fontFamily: "mons-b", fontSize: 25 }}>{appname}</Text>
-                            <Text style={{ fontFamily: "mons" }}>{longappname} application surveillance de entrées et sorties</Text>
-                        </View>
-                        <View style={{ width: "40%" }}>
-
-                        </View>
-                    </View>
-                    <View style={[shadowBox, { height: 140, backgroundColor: Colors.primaryColor, width: "95%", alignSelf: "center" },]}>
-
-                    </View>
-                </View>
+                <Header colors={Colors.primaryColor} />
                 <View
+                    // refreshControl={<RefreshControl colors={[Colors.primaryColor]} refreshing={isloading} onRefresh={onLoadFligts} />}
+                    // showsVerticalScrollIndicator={false}
+                    // contentContainerStyle={{ paddingBottom: "200%" }}
                     style={{ paddingHorizontal: 20, marginTop: 20 }}
                 >
                     <>
+                        {canshow
+                            ?
+                            (
+                                <View style={[inputGroup.container, { flexDirection: "row-reverse" }]}>
+                                    <TouchableHighlight
+                                        underlayColor={Colors.whiteColor}
+                                        onPress={() => { }}
+                                        style={[inputGroup.iconcontainer, { backgroundColor: Colors.pillColor }]}
+                                    >
+                                        <Ionicons name={"search"} size={Dims.iconsize} color={Colors.primaryColor} />
+                                    </TouchableHighlight>
+                                    <View style={[inputGroup.inputcontainer, { width: "80%" }]}>
+                                        <TextInput
+                                            placeholder='Entrer un mot de recherche ici...'
+                                            enablesReturnKeyAutomatically
+                                            onChangeText={(t) => _performSearch({ keyword: t })}
+                                            style={[inputGroup.input, { fontFamily: "mons" }]}
+                                        />
+                                    </View>
+                                    <View style={[inputGroup.iconcontainer, { backgroundColor: Colors.primaryColor }]}>
+                                        <Entypo name="lock" size={Dims.iconsize} color={Colors.whiteColor} />
+                                    </View>
+                                </View>
+                            )
+                            :
+                            <></>
+                        }
+
+                        <View View style={{ width: "100%", alignSelf: "center" }}>
+                            <View style={{ width: "100%", height: 65, flexDirection: "column", marginTop: 10 }}>
+                                <TouchableHighlight
+                                    underlayColor={Colors.primaryColor}
+                                    onPress={() => setcanshow(!canshow)}
+                                    style={[{}, btn]}>
+                                    <Text style={{ color: Colors.whiteColor, fontFamily: "mons-b" }}>{canshow ? "Annuler" : "Trouver un vol"}</Text>
+                                </TouchableHighlight>
+                            </View>
+                        </View>
                         <Divider />
                         <>
                             <View style={{ paddingVertical: 5, marginTop: 20 }}>
