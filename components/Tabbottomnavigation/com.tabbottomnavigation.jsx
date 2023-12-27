@@ -81,7 +81,7 @@ export const TabBottom = () => {
                     (
                       <View style={[{
                         backgroundColor: Colors.whiteColor,
-                        borderWidth: .1,
+                        borderWidth: .2,
                         borderColor: Colors.primaryColor,
                         padding: 8,
                         justifyContent: "center",
