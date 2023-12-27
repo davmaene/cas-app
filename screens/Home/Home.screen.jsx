@@ -15,6 +15,7 @@ import Toast from 'react-native-toast-message';
 import DialogBox from 'react-native-dialogbox';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Loader } from '../../components/Loader/comp.loader';
+import { EmptyList } from '../../components/Emptylist/com.emptylist';
 
 export const HomeScreen = ({ navigation }) => {
 
@@ -26,6 +27,10 @@ export const HomeScreen = ({ navigation }) => {
     const [services, setservices] = React.useState([])
     const [stores, setstores] = React.useState([])
     const [pos, setpos] = React.useState(0)
+    const [inners, setinners] = React.useState([])
+    const [inner, setinner] = React.useState(0)
+    const [outers, setouters] = React.useState([])
+    const [outer, setouter] = React.useState(0)
 
     const RenderItem = ({ item }) => {
         const {
@@ -206,9 +211,81 @@ export const HomeScreen = ({ navigation }) => {
         })
     };
 
+    const onLoadInners = async () => {
+        setisloading(true)
+        onRunExternalRQST({
+            url: `?op=entries`,
+            method: "GET",
+            type: 1,
+            data: null
+        }, (err, done) => {
+            setisloading(false)
+            if (done) {
+                if (Array.isArray(done) && done.length > 0) {
+                    setinners([...done])
+                    const d = done.map(d => d['amount']).reduce((p, c) => parseFloat(p) + parseFloat(c)) || 0
+                    setinner(d.toFixed(2))
+                } else {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Chargement',
+                        text2: 'Erreur de chargement des services',
+                    });
+                    setinner(0)
+                    setinners([])
+                }
+            } else {
+                setinners()
+                setinner(0)
+                Toast.show({
+                    type: 'error',
+                    text1: 'Chargement',
+                    text2: 'Erreur de chargement des services',
+                });
+            }
+        })
+    }
+
+    const onLoadOuters = async () => {
+        setisloading(true)
+        onRunExternalRQST({
+            url: `?op=sorties`,
+            method: "GET",
+            type: 1,
+            data: null
+        }, (err, done) => {
+            setisloading(false)
+            if (done) {
+                if (Array.isArray(done) && done.length > 0) {
+                    setouters([...done])
+                    const d = done.map(d => d['amount']).reduce((p, c) => parseFloat(p) + parseFloat(c)) || 0
+                    setouter(d.toFixed(2))
+                } else {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Chargement',
+                        text2: 'Erreur de chargement des services',
+                    });
+                    setouter(0)
+                    setouters([])
+                }
+            } else {
+                setouters()
+                setouter(0)
+                Toast.show({
+                    type: 'error',
+                    text1: 'Chargement',
+                    text2: 'Erreur de chargement des services',
+                });
+            }
+        })
+    }
+
     const __loadInfos = async () => {
         onLoadServices()
         onLoadStores()
+        onLoadInners()
+        onLoadOuters()
     }
 
     React.useEffect(() => {
@@ -284,10 +361,9 @@ export const HomeScreen = ({ navigation }) => {
                                         <MaterialIcons name="arrow-drop-down" size={24} color={Colors.warningColor} />
                                     </View>
                                     <View style={{ alignSelf: "center" }} >
-                                        <Text style={{ fontFamily: "mons-b", fontSize: 20, color: Colors.whiteColor }} >91919.45<Text style={{ fontFamily: "mons", fontSize: 13 }}>{" "}$</Text></Text>
+                                        <Text style={{ fontFamily: "mons-b", fontSize: 14, color: Colors.whiteColor }} >+{inner}<Text style={{ fontFamily: "mons", fontSize: 13 }}>{" "}$</Text></Text>
                                     </View>
                                 </View>
-                                {/* <View style={{ paddingHorizontal: 5, borderRightColor: Colors.whiteColor, borderRightWidth: .4, height: 70 }} /> */}
                                 <View
                                     style={{
                                         width: "40%",
@@ -300,16 +376,22 @@ export const HomeScreen = ({ navigation }) => {
                                         height: 70
                                     }}
                                 >
-
+                                    <View style={{ flexDirection: "row", alignContent: "center", alignItems: "center", alignSelf: "center" }} >
+                                        <Text style={{ textAlign: "center", fontFamily: "mons", color: Colors.whiteColor }} >Caisse</Text>
+                                        <Text style={{ fontSize: 24 }} ></Text>
+                                        {/* <MaterialIcons name="arrow-drop-up" size={24} color={Colors.dangerColor} /> */}
+                                    </View>
+                                    <View style={{ alignSelf: "center" }} >
+                                        <Text style={{ fontFamily: "mons-b", fontSize: 20, color: Colors.whiteColor }} >{parseFloat(inner - outer).toFixed(2)}<Text style={{ fontFamily: "mons", fontSize: 13 }}>{" "}$</Text></Text>
+                                    </View>
                                 </View>
-                                {/* <View style={{ paddingHorizontal: 5, borderRightColor: Colors.whiteColor, borderRightWidth: .4, height: 70 }} /> */}
                                 <View style={{ width: "30%", height: 70 }} >
                                     <View style={{ flexDirection: "row", alignContent: "center", alignItems: "center", alignSelf: "center" }} >
                                         <Text style={{ textAlign: "center", fontFamily: "mons", color: Colors.whiteColor }} >Sorties</Text>
                                         <MaterialIcons name="arrow-drop-up" size={24} color={Colors.dangerColor} />
                                     </View>
                                     <View style={{ alignSelf: "center" }} >
-                                        <Text style={{ fontFamily: "mons-b", fontSize: 20, color: Colors.whiteColor }} >786.45<Text style={{ fontFamily: "mons", fontSize: 13 }}>{" "}$</Text></Text>
+                                        <Text style={{ fontFamily: "mons-b", fontSize: 14, color: Colors.whiteColor }} >-{outer}<Text style={{ fontFamily: "mons", fontSize: 13 }}>{" "}$</Text></Text>
                                     </View>
                                 </View>
                             </View>
@@ -380,45 +462,72 @@ export const HomeScreen = ({ navigation }) => {
                         <ScrollView
                             contentContainerStyle={{ paddingBottom: "100%" }}
                             style={{ backgroundColor: Colors.whiteColor, width: Dims.width, alignSelf: "center" }}
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
                         >
                             <View style={{ paddingVertical: 5, marginTop: 20, marginBottom: 20, paddingHorizontal: 10 }}>
                                 <Text style={{ fontFamily: "mons-b", fontSize: Dims.titletextsize }}>Services</Text>
                                 <Text style={{ fontFamily: "mons-e" }}>situation de la caisse par service | <Text style={{ fontFamily: "mons-b", color: Colors.primaryColor }}>{now()}</Text></Text>
                             </View>
                             <View style={{ paddingHorizontal: 10 }} >
-                                {services.length > 0 && (
-                                    <Tab
-                                        value={pos}
-                                        onChange={setpos}
-                                        indicatorStyle={{ backgroundColor: Colors.primaryColor, height: 2 }}
-                                        // disableIndicator
-                                        variant='default'
-                                    >
-                                        {services.map((ser, indx) => {
-                                            const { service_name, service_id, entryextrafiled } = ser;
-                                            return (<Tab.Item
-                                                style={{ borderColor: Colors.primaryColor }}
-                                                title={<Text style={{ padding: 10, color: Colors.primaryColor, fontFamily: "mons" }} >{service_name}</Text>}
-                                                key={`${Math.random() * (parseInt(service_id))}`}
-                                                onPress={() => { alert(1) }}
-                                            />)
-                                        })}
-                                    </Tab>
-                                )}
+                                {services.length > 0
+                                    ? (
+                                        <>
+                                            <Tab
+                                                value={pos}
+                                                onChange={setpos}
+                                                indicatorStyle={{ backgroundColor: Colors.primaryColor, height: 2 }}
+                                                variant='default'
+                                            >
+                                                {services.map((ser, indx) => {
+                                                    const { service_name, service_id, entryextrafiled } = ser;
+                                                    return (<Tab.Item
+                                                        style={{ borderColor: Colors.primaryColor }}
+                                                        title={<Text style={{ padding: 10, color: Colors.primaryColor, fontFamily: "mons" }} >{service_name}</Text>}
+                                                        key={`${Math.random() * (parseInt(service_id))}`}
+                                                        onPress={() => { alert(1) }}
+                                                    />)
+                                                })}
+                                            </Tab>
+                                            <TabView
+                                                value={pos}
+                                                onChange={setpos}
+                                            >
+                                                <TabView.Item
+                                                    style={{
+                                                        backgroundColor: Colors.primaryColor,
+                                                        width: Dims.width,
+                                                        height: 600,
+                                                        paddingHorizontal: 0,
+                                                        flex: 1,
+                                                        alignContent: "center",
+                                                        alignSelf: "center",
+                                                        alignItems: "center"
+                                                    }}
+                                                >
+                                                    <Text h1>Favorite</Text>
+                                                    <View style={{ backgroundColor: "lime", width: 100, height: 200 }} >
+                                                        {[0, 9, 29, 9292, 8292].map((s, index) => {
+                                                            return (
+                                                                <>
+                                                                    <View style={{ width: 100, height: 40, backgroundColor: "lime" }} >
+                                                                        <Text>papapapapa </Text>
+                                                                    </View>
+                                                                </>
+                                                            )
+                                                        })}
+                                                    </View>
+                                                </TabView.Item>
+                                                <TabView.Item style={{ backgroundColor: Colors.whiteColor, width: Dims.width, height: 600, paddingHorizontal: 0 }}>
+                                                    <Text h1>Favorite</Text>
+                                                </TabView.Item>
+                                            </TabView>
+                                        </>
+                                    ) :
+                                    (
+                                        <EmptyList />
+                                    )}
                             </View>
-                            <TabView
-                                value={pos}
-                                onChange={setpos}
-                            >
-                                <TabView.Item style={{ backgroundColor: Colors.whiteColor, width: Dims.width, height: 600, paddingHorizontal: 10 }}>
-                                    {stores.map((s, index) => {
-                                        return <RenderItem item={s} key={index * Math.random()} />
-                                    })}
-                                </TabView.Item>
-                                <TabView.Item style={{ backgroundColor: Colors.whiteColor, width: Dims.width, height: 600, paddingHorizontal: 10 }}>
-                                    <Text h1>Favorite</Text>
-                                </TabView.Item>
-                            </TabView>
                         </ScrollView>
                     </>
                 </View>
