@@ -162,7 +162,7 @@ export const HomeScreen = ({ navigation }) => {
                 });
             }
         })
-    }
+    };
 
     const __loadInfos = async () => {
         onLoadServices()
@@ -231,7 +231,7 @@ export const HomeScreen = ({ navigation }) => {
                         </View>
                         <View style={{ position: "absolute", zIndex: 100, padding: 5, bottom: -20, width: "100%", flexDirection: "row", alignContent: "center", alignItems: "center", justifyContent: "center" }} >
                             <TouchableHighlight
-                                style={{
+                                style={[shadowBox, {
                                     padding: 8,
                                     height: 40,
                                     width: 40,
@@ -240,7 +240,7 @@ export const HomeScreen = ({ navigation }) => {
                                     alignItems: "center",
                                     justifyContent: "center",
                                     backgroundColor: Colors.pillColor
-                                }}
+                                }]}
                                 underlayColor={Colors.pillColor}
                                 onPress={(e) => {
                                     alert("Entrees")
@@ -250,7 +250,7 @@ export const HomeScreen = ({ navigation }) => {
                             </TouchableHighlight>
                             <View style={{ padding: 12 }} />
                             <TouchableHighlight
-                                style={{
+                                style={[shadowBox, {
                                     padding: 8,
                                     height: 40,
                                     width: 40,
@@ -259,7 +259,7 @@ export const HomeScreen = ({ navigation }) => {
                                     alignItems: "center",
                                     justifyContent: "center",
                                     backgroundColor: Colors.pillColor
-                                }}
+                                }]}
                                 underlayColor={Colors.pillColor}
                                 onPress={(e) => {
                                     alert("Dettes")
@@ -269,7 +269,7 @@ export const HomeScreen = ({ navigation }) => {
                             </TouchableHighlight>
                             <View style={{ padding: 12 }} />
                             <TouchableHighlight
-                                style={{
+                                style={[shadowBox, {
                                     padding: 8,
                                     height: 40,
                                     width: 40,
@@ -278,7 +278,7 @@ export const HomeScreen = ({ navigation }) => {
                                     alignItems: "center",
                                     justifyContent: "center",
                                     backgroundColor: Colors.pillColor
-                                }}
+                                }]}
                                 underlayColor={Colors.pillColor}
                                 onPress={(e) => {
                                     alert("Sorties")
@@ -289,7 +289,7 @@ export const HomeScreen = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
-                <View
+                {/* <View
                     style={{ paddingHorizontal: 20, marginTop: 20 }}
                 >
                     <>
@@ -310,7 +310,7 @@ export const HomeScreen = ({ navigation }) => {
                             </View>
                         </>
                     </>
-                </View>
+                </View> */}
             </View>
             <DialogBox ref={ref} isOverlayClickClose={true} />
             <Spinner
