@@ -5,10 +5,10 @@ import { Dims } from '../../assets/dimensions/Dimemensions';
 import { SpinerStyle, btn, inputGroup, shadowBox } from '../../assets/styles/Styles';
 import { AntDesign, Entypo, Ionicons, Feather, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { Header } from '../../components/Header/comp.header';
-import { Divider, Image, Tab, TabView } from 'react-native-elements';
-import { flights, now, shuffleArray } from '../../helpers/helpers.all';
+import { Avatar, Divider, Image, Tab, TabView } from 'react-native-elements';
+import { convertString, flights, now, shuffleArray } from '../../helpers/helpers.all';
 import { handleSearch } from 'dm-handlesearch';
-import { appname, longappname } from '../../assets/configs/configs';
+import { appname, baseURL, longappname } from '../../assets/configs/configs';
 import { onDeconnextion, onRunExternalRQST, onRunInsertQRY } from '../../services/communications';
 import RNRestart from 'react-native-restart';
 import Toast from 'react-native-toast-message';
@@ -16,6 +16,7 @@ import DialogBox from 'react-native-dialogbox';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Loader } from '../../components/Loader/comp.loader';
 import { EmptyList } from '../../components/Emptylist/com.emptylist';
+import he from 'he'
 
 export const HomeScreen = ({ navigation }) => {
 
@@ -31,6 +32,7 @@ export const HomeScreen = ({ navigation }) => {
     const [inner, setinner] = React.useState(0)
     const [outers, setouters] = React.useState([])
     const [outer, setouter] = React.useState(0)
+    const [user,] = React.useState(global.user)
 
     const RenderItem = ({ item }) => {
         const {
@@ -43,42 +45,28 @@ export const HomeScreen = ({ navigation }) => {
             service_id,
             storeid21,
             storename,
-        } = item
+        } = item;
+
         return (
             <>
                 <TouchableHighlight
                     underlayColor={Colors.whiteColor}
-                    onPress={() => navigation.navigate("detailflighht", { item })}
+                    onPress={() => alert(1)}
+                    style={{ width: "94%" }}
                 >
                     <View style={{ flexDirection: "row", alignContent: "center", alignItems: "center", justifyContent: "center", height: 100, elevation: 3, backgroundColor: Colors.whiteColor, marginTop: 10, borderRadius: Dims.borderradius, paddingHorizontal: 10 }}>
-                        <View style={{ width: "30%" }}>
-                            <Image source={{ uri: item && item['src'] }} resizeMode='center' style={{ width: 70, height: 60 }} />
+                        <View style={{ width: "20%" }}>
+                            {parseInt(service_id) === 1
+                                ? <FontAwesome name="plane" size={24} color={Colors.primaryColor} />
+                                : <FontAwesome name="bank" size={24} color={Colors.primaryColor} />
+                            }
                         </View>
                         <View style={{ width: "60%" }}>
                             <View style={{ flexDirection: "row", width: "100%", justifyContent: "space-between", alignContent: "center", alignItems: "center", alignSelf: "center" }}>
                                 <View style={{ flexDirection: "column" }}>
                                     <View>
-                                        <Text style={{ fontFamily: "mons-e", textAlign: "center", fontSize: Dims.subtitletextsize }}>{item && item['from']}</Text>
-                                    </View>
-                                    <View>
-                                        {/* <Text style={{ fontFamily: "mons-b", textAlign: "center" }}>{dep && dep['time']}</Text> */}
-                                    </View>
-                                    <View>
-                                        {/* <Text style={{ fontFamily: "mons-e", textAlign: "center", fontSize: Dims.subtitletextsize }}>{dep && dep['date']}</Text> */}
-                                    </View>
-                                </View>
-                                <View>
-                                    <Ionicons name="ios-airplane" size={24} color="black" />
-                                </View>
-                                <View style={{ flexDirection: "column" }}>
-                                    <View>
-                                        <Text style={{ fontFamily: "mons-e", textAlign: "center", fontSize: Dims.subtitletextsize }}>{item && item['to']}</Text>
-                                    </View>
-                                    <View>
-                                        {/* <Text style={{ fontFamily: "mons-b", textAlign: "center" }}>{arr && arr['time']}</Text> */}
-                                    </View>
-                                    <View>
-                                        {/* <Text style={{ fontFamily: "mons-e", textAlign: "center", fontSize: Dims.subtitletextsize }}>{arr && arr['date']}</Text> */}
+                                        <Text style={{ fontFamily: "mons-b", textAlign: "center", fontSize: Dims.titletextsize, color: Colors.primaryColor }}>{item && storename ? convertString({ string: storename }) : ""}</Text>
+                                        <Text style={{ fontFamily: "mons-e", textAlign: "center", fontSize: Dims.subtitletextsize }}>{item && storename ? convertString({ string: storename }) : ""}</Text>
                                     </View>
                                 </View>
                             </View>
@@ -244,7 +232,7 @@ export const HomeScreen = ({ navigation }) => {
                 });
             }
         })
-    }
+    };
 
     const onLoadOuters = async () => {
         setisloading(true)
@@ -279,7 +267,43 @@ export const HomeScreen = ({ navigation }) => {
                 });
             }
         })
-    }
+    };
+
+    const onLoadStoresByIdServices = async ({ idservice }) => {
+        setisloading(true)
+        onRunExternalRQST({
+            url: `?op=sorties`,
+            method: "POST",
+            type: 1,
+            data: `service_id=${idservice}`
+        }, (err, done) => {
+            setisloading(false)
+            console.log('====================================');
+            console.log(err, done);
+            console.log('====================================');
+            if (done) {
+                if (Array.isArray(done) && done.length > 0) {
+                    setstores([...done])
+                    // const d = done.map(d => d['amount']).reduce((p, c) => parseFloat(p) + parseFloat(c)) || 0
+                    // setouter(d.toFixed(2))
+                } else {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Chargement',
+                        text2: 'Erreur de chargement des services',
+                    });
+                    setstores([...[]])
+                }
+            } else {
+                setstores([...[]])
+                Toast.show({
+                    type: 'error',
+                    text1: 'Chargement',
+                    text2: 'Erreur de chargement des services',
+                });
+            }
+        })
+    };
 
     const __loadInfos = async () => {
         onLoadServices()
@@ -290,6 +314,7 @@ export const HomeScreen = ({ navigation }) => {
 
     React.useEffect(() => {
         __loadInfos()
+        // onLoadStoresByIdServices({ idservice: 1 })
     }, [])
 
     return (
@@ -316,17 +341,17 @@ export const HomeScreen = ({ navigation }) => {
                                 }}
                                 underlayColor={Colors.primaryColor}
                                 onPress={(e) => {
-                                    navigation.navigate('profile')
+                                    handlDeconnexion()
                                 }}
                             >
-                                <AntDesign name="user" size={Dims.iconsize} color={Colors.whiteColor} />
+                                <AntDesign name="login" size={Dims.iconsize} color={Colors.whiteColor} />
                             </TouchableHighlight>
                             <View style={{ padding: 5 }} />
-                            <TouchableHighlight
+                            {/* <TouchableHighlight
                                 style={{
                                     padding: 8,
-                                    height: 40,
-                                    width: 40,
+                                    height: 60,
+                                    width: 60,
                                     borderRadius: 5,
                                     alignContent: "center",
                                     alignItems: "center",
@@ -335,17 +360,27 @@ export const HomeScreen = ({ navigation }) => {
                                 }}
                                 underlayColor={Colors.primaryColor}
                                 onPress={(e) => {
-                                    handlDeconnexion()
+                                    navigation.navigate('profile')
                                 }}
-                            >
-                                <AntDesign name="login" size={Dims.iconsize} color={Colors.whiteColor} />
-                            </TouchableHighlight>
+                            > */}
+                            {/* <AntDesign name="user" size={Dims.iconsize} color={Colors.whiteColor} /> */}
+                            <Avatar
+                                source={{ uri: `${baseURL}/${user && user['photo']}` }}
+                                // rounded
+                                size={40}
+                                avatarStyle={{ borderRadius: 3 }}
+                                containerStyle={{ backgroundColor: Colors.pillColor, borderColor: Colors.primaryColor, borderWidth: 2, borderRadius: 5 }}
+                                onPress={() => {
+                                    navigation.navigate('profile')
+                                }}
+                            />
+                            {/* </TouchableHighlight> */}
                         </View>
                     </View>
                     <View style={[shadowBox, { height: 140, backgroundColor: Colors.primaryColor, width: "95%", alignSelf: "center" },]}>
                         <View style={{ width: "100%", height: "auto", padding: 15 }} >
                             <View style={{ flexDirection: "row", alignContent: "center", alignItems: "center" }} >
-                                <FontAwesome name="calendar" size={24} color={Colors.whiteColor} />
+                                <FontAwesome name="calendar" size={Dims.iconsize + 2} color={Colors.whiteColor} />
                                 <View style={{ flexDirection: "column" }} >
                                     <Text style={{ fontFamily: "mons", fontSize: 11, paddingLeft: 10, color: Colors.whiteColor }} >{"Aujourd'hui"}</Text>
                                     <Text style={{ fontFamily: "mons-b", fontSize: 14, paddingLeft: 10, color: Colors.whiteColor }} >{now()}</Text>
@@ -361,7 +396,7 @@ export const HomeScreen = ({ navigation }) => {
                                         <MaterialIcons name="arrow-drop-down" size={24} color={Colors.warningColor} />
                                     </View>
                                     <View style={{ alignSelf: "center" }} >
-                                        <Text style={{ fontFamily: "mons-b", fontSize: 14, color: Colors.whiteColor }} >+{inner}<Text style={{ fontFamily: "mons", fontSize: 13 }}>{" "}$</Text></Text>
+                                        <Text style={{ fontFamily: "mons-b", fontSize: 14, color: Colors.whiteColor }} >+ {inner}<Text style={{ fontFamily: "mons", fontSize: 13 }}>{" "}$</Text></Text>
                                     </View>
                                 </View>
                                 <View
@@ -391,7 +426,7 @@ export const HomeScreen = ({ navigation }) => {
                                         <MaterialIcons name="arrow-drop-up" size={24} color={Colors.dangerColor} />
                                     </View>
                                     <View style={{ alignSelf: "center" }} >
-                                        <Text style={{ fontFamily: "mons-b", fontSize: 14, color: Colors.whiteColor }} >-{outer}<Text style={{ fontFamily: "mons", fontSize: 13 }}>{" "}$</Text></Text>
+                                        <Text style={{ fontFamily: "mons-b", fontSize: 14, color: Colors.whiteColor }} >- {outer}<Text style={{ fontFamily: "mons", fontSize: 13 }}>{" "}$</Text></Text>
                                     </View>
                                 </View>
                             </View>
@@ -464,6 +499,7 @@ export const HomeScreen = ({ navigation }) => {
                             style={{ backgroundColor: Colors.whiteColor, width: Dims.width, alignSelf: "center" }}
                             showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false}
+                            refreshControl={<RefreshControl colors={[Colors.primaryColor]} onRefresh={__loadInfos} refreshing={isloading} />}
                         >
                             <View style={{ paddingVertical: 5, marginTop: 20, marginBottom: 20, paddingHorizontal: 10 }}>
                                 <Text style={{ fontFamily: "mons-b", fontSize: Dims.titletextsize }}>Services</Text>
@@ -485,7 +521,6 @@ export const HomeScreen = ({ navigation }) => {
                                                         style={{ borderColor: Colors.primaryColor }}
                                                         title={<Text style={{ padding: 10, color: Colors.primaryColor, fontFamily: "mons" }} >{service_name}</Text>}
                                                         key={`${Math.random() * (parseInt(service_id))}`}
-                                                        onPress={() => { alert(1) }}
                                                     />)
                                                 })}
                                             </Tab>
@@ -495,31 +530,40 @@ export const HomeScreen = ({ navigation }) => {
                                             >
                                                 <TabView.Item
                                                     style={{
-                                                        backgroundColor: Colors.primaryColor,
+                                                        backgroundColor: Colors.whiteColor,
                                                         width: Dims.width,
-                                                        height: 600,
                                                         paddingHorizontal: 0,
-                                                        flex: 1,
-                                                        alignContent: "center",
-                                                        alignSelf: "center",
-                                                        alignItems: "center"
+                                                        zIndex: 1000
                                                     }}
                                                 >
-                                                    <Text h1>Favorite</Text>
-                                                    <View style={{ backgroundColor: "lime", width: 100, height: 200 }} >
-                                                        {[0, 9, 29, 9292, 8292].map((s, index) => {
-                                                            return (
-                                                                <>
-                                                                    <View style={{ width: 100, height: 40, backgroundColor: "lime" }} >
-                                                                        <Text>papapapapa </Text>
-                                                                    </View>
-                                                                </>
-                                                            )
-                                                        })}
-                                                    </View>
+                                                    <>
+                                                        <View>
+                                                            {[...stores].filter(s => parseInt(s['service_id']) === 1 ? s : null).map((s, index) => {
+                                                                return (
+                                                                    <>
+                                                                        <RenderItem key={index * Math.random()} item={s} />
+                                                                    </>
+                                                                )
+                                                            })}
+                                                        </View>
+                                                    </>
+                                                </TabView.Item>
+
+                                                <TabView.Item style={{ backgroundColor: Colors.whiteColor, width: Dims.width, height: 600, paddingHorizontal: 0 }}>
+                                                    <>
+                                                        <View>
+                                                            {[...stores].filter(s => parseInt(s['service_id']) === 2 ? s : null).map((s, index) => {
+                                                                return (
+                                                                    <>
+                                                                        <RenderItem key={index * Math.random()} item={s} />
+                                                                    </>
+                                                                )
+                                                            })}
+                                                        </View>
+                                                    </>
                                                 </TabView.Item>
                                                 <TabView.Item style={{ backgroundColor: Colors.whiteColor, width: Dims.width, height: 600, paddingHorizontal: 0 }}>
-                                                    <Text h1>Favorite</Text>
+                                                    <EmptyList />
                                                 </TabView.Item>
                                             </TabView>
                                         </>

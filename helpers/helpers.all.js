@@ -1,4 +1,5 @@
 import moment from "moment";
+import he from 'he';
 moment.locale("fr");
 
 export const shuffleArray = ({ array }) => {
@@ -182,3 +183,4 @@ export const flights = [
 ];
 
 export const now = () => moment().format("L");
+export const convertString = ({ string }) => he.decode(string)

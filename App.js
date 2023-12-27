@@ -13,6 +13,7 @@ import { toastConfig } from './assets/Toast/Toastconfig';
 import Toast from 'react-native-toast-message';
 import { DetailflightScreen } from './screens/Detailsflight/Detailsflights';
 import { ProfileScreen } from './screens/Profile/Profilescreen';
+import { DetailsStore } from './screens/DetailsStore/DetailStore';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ export default function App() {
           <Stack.Screen name="verifyaccount" component={VerifyaccountScreen} />
           <Stack.Screen name="profile" component={ProfileScreen} />
           <Stack.Screen name="detailflighht" component={DetailflightScreen} />
+          <Stack.Screen name="detailstore" component={DetailsStore} />
 
         </Stack.Navigator>
       </NavigationContainer>
